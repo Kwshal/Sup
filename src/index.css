@@ -22,11 +22,12 @@
   padding: 0;
   box-sizing: border-box;
   border: none;
+  user-select: none;
 }
 
 body {
   font-family: Roboto, Helvetica, Arial, sans-serif;
-  background-color: rgb(131, 61, 223);
+  background-color: var(--main-bgc);
   /* background: linear-gradient(45deg, var(--color-teal-light), var(--color-sienna-light)); */
   
   height: 100vh;
@@ -86,7 +87,7 @@ body {
   color: var(--color-teal);
   color: transparent;
   font-size: 14px;
-  background: linear-gradient(to right, var(--color-teal), var(--color-sienna));
+  background: linear-gradient(to right, var(--color-teal-light), var(--color-sienna-light));
   background-clip: text;
   margin: 0;
   padding: 0;

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Button from "../components/Button"
 import { saveMsgsToCloud, listenForMessages } from "../db";
 
-let ChatWindow = ({ contact, back }) => {
+let Chat = ({ contact, onBack }) => {
      const user = localStorage.getItem("user") || "Guest";
      const [messages, setMessages] = useState([]);
      const [inputValue, setInputValue] = useState("");
@@ -12,7 +12,9 @@ let ChatWindow = ({ contact, back }) => {
           const messagesContainer = document.querySelector(".chat-window-messages");
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
           messagesContainer.scrollBehavior = "smooth";
+
      }
+     // scrollToBottom();
 
      useEffect(() => {
           listenForMessages(user, contact, data => setMessages(Object.entries(data)));
@@ -45,8 +47,11 @@ let ChatWindow = ({ contact, back }) => {
      return (
           <div className="chat-window">
                <div className="chat-window-header">
-                    <Button id="back" type="button" btnText="&#8249;" btnFunction={back} />
-                    <h1 className="name">{contact}</h1>
+                    <Button id="back" type="button" btnText="&#8249;" btnFunction={onBack} />
+                    <h1 className="name">
+                         {/* <span className="avatar">{contact ? contact[0] : "?"}</span> */}
+                         {contact}
+                    </h1>
                     <Button id="options" type="button" btnText="&#8942;" />
                     {/* <hr /> */}
                </div>
@@ -74,4 +79,4 @@ let ChatWindow = ({ contact, back }) => {
      )
 }
 
-export default ChatWindow
+export default Chat;

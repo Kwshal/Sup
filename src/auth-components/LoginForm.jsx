@@ -1,125 +1,111 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import StatusMessage from "./StatusMessage";
-import Button from "../components/Button";
 import { getUser } from "../db";
 
-function LoginForm({ logIn, signUp }) {
+function LoginForm({onLogIn, onEnter}) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-     const [username, setUsername] = useState("");
-     const [password, setPassword] = useState("");
-     const [user, setUser] = useState(null);
-     const [statusMessage, setStatusMessage] = useState("");
+  // 🟩 Clean: Use a ref instead of document.getElementById for focusing
+  const usernameRef = useRef(null);
 
-     const handleUsernameInput = () => {
-          const username = document.getElementById("username");
-          setUsername(username.value);
-          setStatusMessage("");
-     };
-     const handlePasswordInput = () => {
-          const passwordInput = document.getElementById("password");
-          setPassword(passwordInput.value);
-          setStatusMessage("");
-     };
+  // 🟩 Clean: Handle controlled input values correctly
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    if (statusMessage) setStatusMessage("");
+  };
 
-     useEffect(() => {
-          localStorage.getItem("user") && logIn(); // Automatically log in if user is already stored in localStorage
-     }, []);
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (statusMessage) setStatusMessage("");
+  };
 
-     useEffect(() => {
-          !localStorage.getItem("user") && document.getElementById("username").focus();
-     }, []);
+  // 🟩 Clean: Handle authentication entirely inside the submit handler to prevent database hammer
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
 
-     useEffect(() => {
-          username && getUser(username)
-               .then(data => {
-                         if (data) {
-                              // console.log("Fetched user data:", data);
-                              setUser(data);
-                              // setStatusMessage("User found.");
-                         } else {
-                              // setUser(null);
-                              // setStatusMessage("User not found.");
-                         }
-               })
-               .catch(() => {
-                    setUser(null);
-                    setStatusMessage("Error fetching user data.");
-               });
-     }, [username]);
+    // 1. Client-side Validation Checks
+    if (!trimmedUsername && !trimmedPassword) {
+      return setStatusMessage("Please enter a username and password.");
+    }
+    if (!trimmedUsername) {
+      return setStatusMessage("Please enter a username.");
+    }
+    if (!trimmedPassword) {
+      return setStatusMessage("Please enter a password.");
+    }
 
-     // Mock user data
-     // In a real application, this data would be fetched from a server
-     let userList = [
-          { username: "u", password: "p" },
-          { username: "user2", password: "pass2" },
-          { username: "user3", password: "pass3" }
-     ];
-     // let user = getUser();
+    setIsLoading(true);
+    setStatusMessage("");
 
-     const handleEnterButtonClick = (e) => {
-          e.preventDefault();
-          if (username.trim() === "") {
-               setStatusMessage("Please enter a username.");
-          }
-          else if (!user) {
-               setStatusMessage("Username not found.");
-          }
-          else if (username.trim() === "" && password.trim() === "") {
-               setStatusMessage("Please enter a username and password.");
-          }
-          else if (password.trim() === "") {
-               setStatusMessage("Please enter a password.");
-          }
-          else if (user.username === username.trim()) {
-               if (user.password === password.trim()) {
-                    // setStatusMessage("Welcome to ChatApp!");
-                    logIn(); //?
-                    localStorage.setItem("user", username);
-               } else {
-                    setStatusMessage("Incorrect password.");
-               }
-          } else {
-               setStatusMessage("");
-          }
+    try {
+      // 2. Fetch data only when the user submits, not on every keystroke
+      const user = await getUser(trimmedUsername);
 
-     };
+      if (!user) {
+        setStatusMessage("Username not found.");
+        return;
+      }
 
-     return (
-          <form className="auth-form">
-               <input
-                    type="text"
-                    id="username"
-                    value={username}
-                    onChange={handleUsernameInput}
-                    placeholder="Username"
-                    required
-               />
-               <input
-                    type="text"
-                    id="password"
-                    value={password}
-                    onChange={handlePasswordInput}
-                    placeholder="Password"
-                    required
-               />
+      // 3. Verify credentials
+      if (user.password === trimmedPassword) {
+        localStorage.setItem("user", trimmedUsername);
+        onEnter();
+      } else {
+        setStatusMessage("Incorrect password.");
+      }
+    } catch (error) {
+      setStatusMessage("Error connecting to server. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-               {statusMessage && <StatusMessage status={statusMessage} />}
+  return (
+    <form className="auth-form" onSubmit={handleFormSubmit}>
+      <input
+        ref={usernameRef}
+        type="text"
+        value={username}
+        onChange={handleUsernameChange}
+        placeholder="Username"
+        required
+      />
+      <input
+        type="password" 
+        value={password}
+        onChange={handlePasswordChange}
+        placeholder="Password"
+        autoComplete="current-password"
+        required
+      />
 
-               <div className="button-group">
-                    <Button
-                         id={"enterButton"}
-                         btnText="Enter ChatApp"
-                         type="submit"
-                         btnFunction={handleEnterButtonClick}
-                    />
-                    <Button
-                         id={"newButton"}
-                         btnText="New user? Sign Up"
-                         type="button"
-                         btnFunction={signUp}
-                    />
-               </div>
-          </form>
-     );
+      {statusMessage && <StatusMessage status={statusMessage} />}
+
+      <div className="button-group">
+        <button
+          id="enterButton"
+          type="submit"
+          disabled={isLoading}
+          onClick={handleFormSubmit}
+        >
+          {isLoading ? "Logging in..." : "Enter ChatApp"}
+        </button>
+        <button
+          id="newButton"
+          type="button"
+          onClick={onLogIn}
+        >
+          New user? Sign Up
+        </button>
+      </div>
+    </form>
+  );
 }
+
 export default LoginForm;

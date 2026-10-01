@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import AuthPage from './auth-components/Auth.jsx'
-import ChatPage from './chat-components/ChatPage.jsx'
+import ChatsPage from './chat-components/ChatsPage.jsx'
 
 function App() {
-  const [entered, setEntered] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  function logOut() {
-    setEntered(false);
-    localStorage.removeItem('user'); // Clear user data from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogOut = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
   }
 
   return (
     <div className="App">
-      <div>
-        {!entered && <AuthPage entered={() => setEntered(true)} />}
-        {entered && <ChatPage logOut={logOut} />}
-        {/* <ChatPage logOut={() => setEntered(false)} /> */}
-      </div>
+      {isLoggedIn ? <ChatsPage onLogOut={handleLogOut} /> : <AuthPage enterChats={() => setIsLoggedIn(true)} />}
     </div>
   )
 }

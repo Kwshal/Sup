@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react"
 import Button from "../components/Button"
 
-let Sidebar = ({ logOut, close }) => {
+let Sidebar = ({ onLogOut, onClose }) => {
 
      const user = localStorage.getItem("user") || "Guest";
      const sidebarRef = useRef(null);
@@ -18,7 +18,7 @@ let Sidebar = ({ logOut, close }) => {
      useEffect(() => {
           const handleClick = (e) => {
                if (e.target === sidebarRef.current) {
-                    close();
+                    onClose();
                }
           };
           const sidebarElem = sidebarRef.current;
@@ -26,7 +26,7 @@ let Sidebar = ({ logOut, close }) => {
           return () => {
                sidebarElem.removeEventListener("click", handleClick);
           };
-     }, [close]);
+     }, [onClose]);
 
      return (
           <div className="Sidebar" ref={sidebarRef}>
@@ -35,9 +35,7 @@ let Sidebar = ({ logOut, close }) => {
                     <p>{user}</p>
 
                     <Button id="toggle-theme" type="button" btnText="Toggle Theme" btnFunction={toggleTheme} />
-                    {/* <Button id="close" type="button" btnText="&#10006;" btnFunction={close} /> */}
-                    {/* <div className="door"><span className="knob"></span></div> */}
-                    <Button id="logOutButton" type="button" btnText="Log Out" btnFunction={logOut} />
+                    <Button id="logOutButton" type="button" btnText="Log Out" btnFunction={onLogOut} />
                </div>
           </div>
      )

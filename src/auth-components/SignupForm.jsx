@@ -1,10 +1,9 @@
 import { useState, useEffect, use } from "react";
 import StatusMessage from "./StatusMessage";
-import Button from "../components/Button";
 import { writeUserData, getUser } from "../db";
 
 
-function SignupForm({ logIn, signUp }) {
+function SignupForm({ onSignUp, onEnter }) {
      const [username, setUsername] = useState("");
      const [password, setPassword] = useState("");
      const [confirmPassword, setConfirmPassword] = useState("");
@@ -32,7 +31,7 @@ function SignupForm({ logIn, signUp }) {
                     setUser(null);
                     setStatusMessage("Error fetching user data.");
                })
-     }, [username]);
+     }, []);
 
 
      // mock data
@@ -63,8 +62,8 @@ function SignupForm({ logIn, signUp }) {
                localStorage.setItem("user", username.value.trim());
                localStorage.setItem("password", password.value.trim());
                writeUserData(username.value.trim(), password.value.trim());
-               signUp();
           }
+          onEnter();
      }
 
      const handleUsernameInput = () => {
@@ -114,8 +113,8 @@ function SignupForm({ logIn, signUp }) {
                />
                {statusMessage && <StatusMessage status={statusMessage} />}
                <div className="button-group">
-                    <Button id="enterButton" btnText="Sign Up" type="submit" btnFunction={handleNewButtonClick} />
-                    <Button id="newButton" btnText="Aleady have an account? Login" type="button" btnFunction={logIn} />
+                    <button id="enterButton" type="submit" onClick={handleNewButtonClick}>Sign Up</button>
+                    <button id="newButton" type="button" onClick={onSignUp}>Aleady have an account? Login</button>
                </div>
           </form>
      );

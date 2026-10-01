@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import Button from "../components/Button";
-import { getAllUsers } from "../db";
+import { getAllUsers, } from "../db";
 
 
 // props to be passed to the component
-let UserList = ({ openChat, open }) => {
+let FriendsList = ({ onSidebarOpen, onChatOpen }) => {
      const [users, setUsers] = useState([]);
+
+     // useEffect(() => {
+
 
      useEffect(() => {
           getAllUsers()
@@ -22,7 +25,8 @@ let UserList = ({ openChat, open }) => {
                          setUsers([]);
                     }
                })
-               .catch(() => setUsers([]))
+               .catch(() => setUsers([]));
+
      }, []);
 
      return (
@@ -30,19 +34,29 @@ let UserList = ({ openChat, open }) => {
                {/* <h2 className="user-list-header">Contacts</h2> */}
                <span className="girst">
                     <h2 className="logo">
-                         Chat-App
-                         {/* <span className="user-count"> ({users.length})</span> */}
+                         Sup_
+                         {/* <span className="user-count"> {users.length}</span> */}
                     </h2>
                     {/* <h4>This is a chat app</h4> */}
-                    <Button id="bergurMenu" type="button" btnText="&#9776;" btnFunction={open} />
+                    <button id="bergurMenu" type="button" onClick={onSidebarOpen} aria-label="Open menu">
+                         &#9776;
+                    </button>
                </span>
                <ul className="user-list-ul">
                     {users.map((user) => (
-                         user.username !== localStorage.getItem("user") && <li key={user.key} onClick={openChat}><span className="avatar">{user.username ? user.username[0] : "?"}</span><span className="name">{user.username || user.key}</span></li>
+                         user.username !== localStorage.getItem("user") &&
+                         <li key={user.key} onClick={onChatOpen} className="user-list-item">
+                              <span className="avatar">{user.username ? user.username[0] : "?"}</span>
+                              <span className="contact-info">
+                                   <span className="name">{user.username || user.key}</span>
+                                   <span className="status">{user.status}</span>
+                              </span>
+                         </li>
                     ))}
                </ul>
           </div>
      )
 }
 
-export default UserList
+
+export default FriendsList;

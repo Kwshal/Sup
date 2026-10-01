@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 
-let TypingIndicator = ({typing, status}) => {
+let Status = ({typing, status}) => {
      useEffect(() => {
           let typingIndicator = document.querySelector('.typing-indicator');
           if (typing.length > 0) {
@@ -16,6 +16,6 @@ let TypingIndicator = ({typing, status}) => {
      )
 }
 
-export default TypingIndicator
+export default Status;
 // This component is used to show the typing indicator in the chat window.
 // It will be displayed when the user is typing a message.

@@ -30,6 +30,7 @@ let getAllUsers = () => {
           }
      });
 }
+
 // get certain user 
 let getUser = (user) => {
      return get(ref(db, `users/${user}`)).then((snapshot) => {
@@ -78,10 +79,10 @@ function saveMsgsToCloud(user, contact, msg) {
 }
 
 function listenForMessages(user, contact, callback) {
-    const msgsRef = ref(db, `users/${user}/contacts/${contact}`);
-    return onValue(msgsRef, snapshot => {
-        callback(snapshot.exists() ? snapshot.val() : {});
-    });
+     const msgsRef = ref(db, `users/${user}/contacts/${contact}`);
+     return onValue(msgsRef, snapshot => {
+          callback(snapshot.exists() ? snapshot.val() : {});
+     });
 }
 
 // Function to update user data
@@ -106,5 +107,6 @@ export {
      getAllUsers,
      getUser,
      saveMsgsToCloud,
-     listenForMessages
+     listenForMessages,
+
 };

@@ -2,22 +2,12 @@ import { useState } from "react";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
 
-function AuthPage({ entered }) {
-     const [signing, setSigning] = useState(false);
-
-     const logIn = () => {
-          // more to be added
-          entered();
-     }
-     const signUp = () => {
-          // more to be added
-          entered();
-     }
+function AuthPage({enterChats}) {
+     const [isLoggingIn, setIsLoggingIn] = useState(true);
 
      return (
-          <div>
-               {!signing && <LoginForm logIn={logIn} signUp={() => setSigning(true)} />}
-               {signing && <SignupForm signUp={signUp} logIn={() => setSigning(false)} />}
+          <div className="auth-page">
+               {isLoggingIn ? <LoginForm onLogIn={() => setIsLoggingIn(false)} onEnter={enterChats} /> : <SignupForm onSignUp={() => setIsLoggingIn(true)} onEnter={enterChats} />}
           </div>
      );
 }
