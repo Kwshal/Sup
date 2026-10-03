@@ -22,13 +22,9 @@ function SignupForm({ onSignUp, onEnter }) {
                          // console.log("Fetched user data:", data);
                          setUser(data);
                          setStatusMessage("User already exists.");
-                    } else {
-                         setUser(null);
-                         setStatusMessage("");
                     }
                })
                .catch(() => {
-                    setUser(null);
                     setStatusMessage("Error fetching user data.");
                })
      }, []);

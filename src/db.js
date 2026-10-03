@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-import { getDatabase, ref, set, onValue, update, remove, push, get, } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { getDatabase, ref, set, onValue, update, remove, push, get, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 const firebaseConfig = {
      apiKey: "AIzaSyCSbf8wxFIFpHJGsNvl5MzQKVht6GqMHZ4",
      authDomain: "react-chatapp-38.firebaseapp.com",
@@ -45,7 +45,7 @@ let getUser = async (user) => {
 
 
 // Function to write data to the database
-function writeUserData(name, password) {
+function writeUserData(name, password, status = 'online') {
      // console.log("writeUserData called with name:", name, "and password:", password);
      const userRef = ref(db, 'users/' + name);
      // check ig the user already exists
@@ -55,7 +55,8 @@ function writeUserData(name, password) {
           } else {
                set(userRef, {
                     username: name,
-                    password: password
+                    password: password,
+                    status: status
                });
                alert("User created successfully");
           }
@@ -98,6 +99,14 @@ function updateUserData(userId, name, password) {
 function deleteUserData(userId) {
      return remove(ref(db, 'users/' + userId));
 }
+
+const statusRef = ref(db, `users/${localStorage.getItem("user")}/status`);
+const connectRef = ref(db, '.info/connected');
+onValue(connectRef, snapshot => {  // Listen for connection state changes
+     if (snapshot.val() === false) return;
+     onDisconnect(statusRef).set(serverTimestamp());
+     set(statusRef, 'online');  // Set status to online when connected
+});
 
 
 // Export the functions for use in other parts of the application
