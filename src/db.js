@@ -1,6 +1,4 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-//   db
 import { getDatabase, ref, set, onValue, update, remove, push, get, } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 const firebaseConfig = {
      apiKey: "AIzaSyCSbf8wxFIFpHJGsNvl5MzQKVht6GqMHZ4",
@@ -13,26 +11,29 @@ const firebaseConfig = {
      databaseURL: "https://react-chatapp-38-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
 
 let getAllUsers = () => {
      return get(ref(db, 'users')).then((snapshot) => {
           if (snapshot.exists()) {
-               // console.log("Users fetched:", snapshot.val());
-               // console.log(typeof snapshot.val());
                return snapshot.val();
           } else {
                throw new Error("No data available");
           }
      });
 }
-
-// get certain user 
-let getUser = (user) => {
+let getAllFriends = (user) => {
+     return get(ref(db, `users/${user}/contacts`)).then((snapshot) => {
+          if (snapshot.exists()) {
+               return snapshot.val();
+          } else {
+               throw new Error("No data available");
+          }
+     });
+}
+let getUser = async (user) => {
      return get(ref(db, `users/${user}`)).then((snapshot) => {
           if (snapshot.exists()) {
                return snapshot.val();
@@ -108,5 +109,5 @@ export {
      getUser,
      saveMsgsToCloud,
      listenForMessages,
-
+     getAllFriends
 };

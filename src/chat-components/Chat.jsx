@@ -14,26 +14,27 @@ let Chat = ({ contact, onBack }) => {
           messagesContainer.scrollBehavior = "smooth";
 
      }
-     // scrollToBottom();
 
      useEffect(() => {
           listenForMessages(user, contact, data => setMessages(Object.entries(data)));
-     }, []);     
+     }, []);
 
-     // useEffect(() => {
-     //      const el = containerRef.current;
-     //      if (el) {
-     //           // Check if content overflows
-     //                console.log(el.scrollHeight > el.clientHeight);
-     //           if (el.scrollHeight > el.clientHeight) {
-     //                el.classList.add("overflowing"); // Align to top if content overflows
-     //                el.classList.remove("not-overflowing");
-     //           } else {
-     //                el.classList.remove("overflowing"); // Align to bottom if content fits
-     //                el.classList.add("not-overflowing");
-     //           }
-     //      }
-     // }, [messages]);
+     useEffect(() => {
+          const el = containerRef.current;
+          el.scrollTop = el.scrollHeight;
+          // console.log("Messages updated, scrolling to bottom:", messages);
+          // if (el) {
+          //      // Check if content overflows
+          //           console.log(el.scrollHeight > el.clientHeight);
+          //      if (el.scrollHeight > el.clientHeight) {
+          //           el.classList.add("overflowing"); // Align to top if content overflows
+          //           el.classList.remove("not-overflowing");
+          //      } else {
+          //           el.classList.remove("overflowing"); // Align to bottom if content fits
+          //           el.classList.add("not-overflowing");
+          //      }
+          // }
+     }, [messages]);
 
      const sendText = () => {
           if (inputValue.trim() !== "") {
@@ -73,7 +74,7 @@ let Chat = ({ contact, onBack }) => {
                          onChange={e => setInputValue(e.target.value)}
                          onKeyDown={e => { if (e.key === "Enter") sendText(); }}
                     />
-                    <Button id="send" type="button" btnText="Send" btnFunction={sendText} />
+                    <button id="send" type="button" onClick={sendText}><img src="./src/assets/img/send-icon.png" alt="Send" /></button>
                </div>
           </div>
      )

@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import Button from "../components/Button";
-import { getAllUsers, } from "../db";
-
+import { getAllUsers } from "../db";
+import Sidebar from "./Sidebar"
+import SearchBar from "./SearchBar"
 
 // props to be passed to the component
-let FriendsList = ({ onSidebarOpen, onChatOpen }) => {
+let FriendsList = ({ onChatOpen }) => {
      const [users, setUsers] = useState([]);
-
-     // useEffect(() => {
-
+     const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
      useEffect(() => {
           getAllUsers()
@@ -37,11 +36,15 @@ let FriendsList = ({ onSidebarOpen, onChatOpen }) => {
                          Sup_
                          {/* <span className="user-count"> {users.length}</span> */}
                     </h2>
-                    {/* <h4>This is a chat app</h4> */}
-                    <button id="bergurMenu" type="button" onClick={onSidebarOpen} aria-label="Open menu">
+                    <button id="search-btn" type="button" onClick={() => setIsSearchBarOpen(true)}>
+                         ⌕️
+                    </button>
+                    <button id="bergurMenu" type="button" onClick={() => setIsSidebarOpen(true)}>
                          &#9776;
                     </button>
                </span>
+               {isSearchBarOpen && <SearchBar onBack={() => setIsSearchBarOpen(false)} />}
+               {isSidebarOpen && <Sidebar onLogOut={() => { localStorage.removeItem('user'); window.location.reload(); }} onClose={() => setIsSidebarOpen(false)} />}
                <ul className="user-list-ul">
                     {users.map((user) => (
                          user.username !== localStorage.getItem("user") &&

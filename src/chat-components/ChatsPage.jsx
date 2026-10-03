@@ -2,10 +2,10 @@ import { useState } from "react"
 import Sidebar from "./Sidebar"
 import FriendsList from "./FriendsList"
 import Chat from "./Chat"
+import SearchBar from "./SearchBar"
 // import ChatHeader from "./ChatHeader"
 
-function ChatsPage({ onLogOut }) {
-     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+function ChatsPage() {
      const [isChatOpen, setIsChatOpen] = useState(false);
      const [contact, setContact] = useState("");
 
@@ -21,8 +21,7 @@ function ChatsPage({ onLogOut }) {
 
      return (
           <div className="chat-page">
-               {isSidebarOpen && <Sidebar onLogOut={onLogOut} onClose={() => setIsSidebarOpen(false)} />}
-               {isChatOpen ? <Chat contact={contact} onBack={() => setIsChatOpen(false)} /> : <FriendsList onChatOpen={openChat} onSidebarOpen={() => setIsSidebarOpen(true)}/>}
+               {isChatOpen ? <Chat contact={contact} onBack={() => setIsChatOpen(false)} /> : <FriendsList onChatOpen={openChat} />}
           </div>
      )
 }
