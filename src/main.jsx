@@ -11,6 +11,6 @@ createRoot(document.getElementById('root')).render(
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/React-ChatApp/service-worker.js');
+    navigator.serviceWorker.register('/Sup/service-worker.js');
   });
 }
