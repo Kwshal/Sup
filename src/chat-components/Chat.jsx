@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import Button from "../components/Button"
-import { saveMsgsToCloud, listenForMessages } from "../db";
+import { saveMsgsToCloud, listenForMessages, listenToUserStatus } from "../db";
 
-let Chat = ({ contact, onBack }) => {
+let Chat = ({ friend, onBack }) => {
      const user = localStorage.getItem("user") || "Guest";
      const [messages, setMessages] = useState([]);
      const [inputValue, setInputValue] = useState("");
+     const [status, setStatus] = useState("");
      const containerRef = useRef(null);
 
      function scrollToBottom() {
@@ -16,29 +17,25 @@ let Chat = ({ contact, onBack }) => {
      }
 
      useEffect(() => {
-          listenForMessages(user, contact, data => setMessages(Object.entries(data)));
-     }, []);
+          const unsubscribeMessages = listenForMessages(
+               user,
+               friend,
+               data => setMessages(Object.entries(data))
+          );
 
-     useEffect(() => {
-          const el = containerRef.current;
-          el.scrollTop = el.scrollHeight;
-          // console.log("Messages updated, scrolling to bottom:", messages);
-          // if (el) {
-          //      // Check if content overflows
-          //           console.log(el.scrollHeight > el.clientHeight);
-          //      if (el.scrollHeight > el.clientHeight) {
-          //           el.classList.add("overflowing"); // Align to top if content overflows
-          //           el.classList.remove("not-overflowing");
-          //      } else {
-          //           el.classList.remove("overflowing"); // Align to bottom if content fits
-          //           el.classList.add("not-overflowing");
-          //      }
-          // }
-     }, [messages]);
+          const unsubscribeStatus = listenToUserStatus(
+               friend,
+               status => setStatus(status)
+          );
 
+          return () => {
+               unsubscribeMessages();
+               unsubscribeStatus();
+          };
+     }, [friend]);
      const sendText = () => {
           if (inputValue.trim() !== "") {
-               saveMsgsToCloud(user, contact, inputValue);
+               saveMsgsToCloud(user, friend, inputValue);
                setInputValue("");
                // messagesSetter();
                // Save the message to the cloud
@@ -50,8 +47,9 @@ let Chat = ({ contact, onBack }) => {
                <div className="chat-window-header">
                     <Button id="back" type="button" btnText="&#8249;" btnFunction={onBack} />
                     <h1 className="name">
-                         {/* <span className="avatar">{contact ? contact[0] : "?"}</span> */}
-                         {contact}
+                         {/* <span className="avatar">{friend ? friend[0] : "?"}</span> */}
+                         {friend}
+                         <span className="status">{status}</span>
                     </h1>
                     <Button id="options" type="button" btnText="&#8942;" />
                     {/* <hr /> */}

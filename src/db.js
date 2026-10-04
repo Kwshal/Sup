@@ -86,6 +86,23 @@ function listenForMessages(user, contact, callback) {
           callback(snapshot.exists() ? snapshot.val() : {});
      });
 }
+function setMyStatus() {
+     const statusRef = ref(db, `users/${localStorage.getItem("user")}/status`);
+     const connectRef = ref(db, '.info/connected');
+
+     onValue(connectRef, snapshot => {  // Listen for connection state changes
+          if (snapshot.val() === false) return;
+          onDisconnect(statusRef).set('offline');  // Set status to offline when disconnected
+          set(statusRef, 'online');  // Set status to online when connected
+     });
+}
+function listenToUserStatus(username, callback) {
+    const statusRef = ref(db, `users/${username}/status`);
+
+    return onValue(statusRef, (snapshot) => {
+        callback(snapshot.val());
+    });
+}
 
 // Function to update user data
 function updateUserData(userId, name, password) {
@@ -100,15 +117,6 @@ function deleteUserData(userId) {
      return remove(ref(db, 'users/' + userId));
 }
 
-const statusRef = ref(db, `users/${localStorage.getItem("user")}/status`);
-const connectRef = ref(db, '.info/connected');
-onValue(connectRef, snapshot => {  // Listen for connection state changes
-     if (snapshot.val() === false) return;
-     onDisconnect(statusRef).set(serverTimestamp());
-     set(statusRef, 'online');  // Set status to online when connected
-});
-
-
 // Export the functions for use in other parts of the application
 export {
      writeUserData,
@@ -118,5 +126,7 @@ export {
      getUser,
      saveMsgsToCloud,
      listenForMessages,
-     getAllFriends
+     getAllFriends,
+     setMyStatus,
+     listenToUserStatus
 };

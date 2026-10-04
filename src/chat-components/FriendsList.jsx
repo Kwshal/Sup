@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../db";
+import { getAllUsers, listenToUserStatus } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
 
@@ -28,6 +28,7 @@ let FriendsList = ({ onChatOpen }) => {
 
      }, []);
 
+
      return (
           <div className="user-list-container">
                {/* <h2 className="user-list-header">Contacts</h2> */}
@@ -47,7 +48,7 @@ let FriendsList = ({ onChatOpen }) => {
                {isSidebarOpen && <Sidebar onLogOut={() => { localStorage.removeItem('user'); window.location.reload(); }} onClose={() => setIsSidebarOpen(false)} />}
                <ul className="user-list-ul">
                     {users.map((user) => (
-                         user.username !== localStorage.getItem("user") &&
+                         user && user.username && user.username !== localStorage.getItem("user") &&
                          <li key={user.key} onClick={onChatOpen} className="user-list-item">
                               <span className="avatar">{user.username ? user.username[0] : "?"}</span>
                               <span className="contact-info">

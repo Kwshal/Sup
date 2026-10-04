@@ -11,7 +11,6 @@ status: pending
 
 
 # Sup.:
-0. hero section - pending
 1. login/signup - done
 2. chatsPage:
    header: logo, search, menu

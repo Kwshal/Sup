@@ -1,9 +1,7 @@
-import { useState } from "react"
-import Sidebar from "./Sidebar"
+import { useState, useEffect } from "react"
 import FriendsList from "./FriendsList"
 import Chat from "./Chat"
-import SearchBar from "./SearchBar"
-// import ChatHeader from "./ChatHeader"
+import { setMyStatus } from "../db";
 
 function ChatsPage() {
      const [isChatOpen, setIsChatOpen] = useState(false);
@@ -18,10 +16,13 @@ function ChatsPage() {
           }
           setIsChatOpen(true);
      }
+     useEffect(() => {
+          setMyStatus(); // Set the user's status to online when the component mounts
+     }, []);
 
      return (
           <div className="chat-page">
-               {isChatOpen ? <Chat contact={contact} onBack={() => setIsChatOpen(false)} /> : <FriendsList onChatOpen={openChat} />}
+               {isChatOpen ? <Chat friend={contact} onBack={() => setIsChatOpen(false)} /> : <FriendsList onChatOpen={openChat} />}
           </div>
      )
 }

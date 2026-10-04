@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import StatusMessage from "./StatusMessage";
-import { getUser } from "../db";
+import { getUser, setMyStatus } from "../db";
 
 function LoginForm({onLogIn, onEnter}) {
   const [username, setUsername] = useState("");
@@ -56,6 +56,7 @@ function LoginForm({onLogIn, onEnter}) {
       if (user.password === trimmedPassword) {
         localStorage.setItem("user", trimmedUsername);
         onEnter();
+        setMyStatus(); // Set the user's status to online after successful login
       } else {
         setStatusMessage("Incorrect password.");
       }

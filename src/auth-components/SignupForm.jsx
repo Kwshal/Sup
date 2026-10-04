@@ -1,6 +1,6 @@
 import { useState, useEffect, use } from "react";
 import StatusMessage from "./StatusMessage";
-import { writeUserData, getUser } from "../db";
+import { writeUserData, getUser, setMyStatus } from "../db";
 
 
 function SignupForm({ onSignUp, onEnter }) {
@@ -60,6 +60,7 @@ function SignupForm({ onSignUp, onEnter }) {
                writeUserData(username.value.trim(), password.value.trim());
           }
           onEnter();
+          setMyStatus(); // Set the user's status to online after successful signup
      }
 
      const handleUsernameInput = () => {
