@@ -1,10 +1,20 @@
+import { useEffect, useState } from "react";
+import { listenToUserStatus } from "../db"; 
 
-const Status = ({ status }) => {
+const Status = ({ user }) => {
+  const [statusText, setStatusText] = useState("");
+
+  useEffect(() => {
+    listenToUserStatus(user, (status) => {
+      setStatusText(status);
+    });
+  }, [user]);
+      console.log("statusText:", statusText);
 
   return (
-    <div className="typing-indicator-container">
-      <p id="typing-indicator">
-        {status}
+    <div className={`status-indicator ${statusText}`}>
+      <p className="status-text">
+        {statusText}
       </p>
     </div>
   );

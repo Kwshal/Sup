@@ -15,6 +15,21 @@ let Chat = ({ friend, onBack }) => {
           messagesContainer.scrollBehavior = "smooth";
 
      }
+     useEffect(() => {
+          const update = () => {
+               document.documentElement.style.setProperty(
+                    "--keyboard-height",
+                    `${window.innerHeight - window.visualViewport.height}px`
+               );
+          };
+
+          window.visualViewport?.addEventListener("resize", update);
+          update();
+
+          return () => {
+               window.visualViewport?.removeEventListener("resize", update);
+          };
+     }, []);
 
      useEffect(() => {
           const unsubscribeMessages = listenForMessages(
@@ -46,11 +61,11 @@ let Chat = ({ friend, onBack }) => {
           <div className="chat-window">
                <div className="chat-window-header">
                     <Button id="back" type="button" btnText="&#8249;" btnFunction={onBack} />
-                    <h1 className="name">
+                    <h2 className="name">
                          {/* <span className="avatar">{friend ? friend[0] : "?"}</span> */}
                          {friend}
-                         <span className="status">{status}</span>
-                    </h1>
+                         <span className={`status-text ${status}`}>{status}</span>
+                    </h2>
                     <Button id="options" type="button" btnText="&#8942;" />
                     {/* <hr /> */}
                </div>

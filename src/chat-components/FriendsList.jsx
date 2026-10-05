@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { getAllUsers, listenToUserStatus } from "../db";
+import { getAllUsers } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
+import Status from "./Status"
+import Features from "./Features"
 
 // props to be passed to the component
 let FriendsList = ({ onChatOpen }) => {
      const [users, setUsers] = useState([]);
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+     const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
 
      useEffect(() => {
           getAllUsers()
@@ -25,9 +28,7 @@ let FriendsList = ({ onChatOpen }) => {
                     }
                })
                .catch(() => setUsers([]));
-
      }, []);
-
 
      return (
           <div className="user-list-container">
@@ -47,17 +48,23 @@ let FriendsList = ({ onChatOpen }) => {
                {isSearchBarOpen && <SearchBar onBack={() => setIsSearchBarOpen(false)} />}
                {isSidebarOpen && <Sidebar onLogOut={() => { localStorage.removeItem('user'); window.location.reload(); }} onClose={() => setIsSidebarOpen(false)} />}
                <ul className="user-list-ul">
+                    <h5 className="friends">Friends</h5>
                     {users.map((user) => (
                          user && user.username && user.username !== localStorage.getItem("user") &&
                          <li key={user.key} onClick={onChatOpen} className="user-list-item">
                               <span className="avatar">{user.username ? user.username[0] : "?"}</span>
                               <span className="contact-info">
                                    <span className="name">{user.username || user.key}</span>
-                                   <span className="status">{user.status}</span>
+                                   <Status user={user.username} />
                               </span>
+                              <span className="pin"><img width="32" height="32" src="https://img.icons8.com/windows/32/pin.png" alt="pin"/></span>
                          </li>
                     ))}
                </ul>
+               <button id="features-btn" type="button" onClick={() => setIsFeaturesOpen(!isFeaturesOpen)}>
+                    {isFeaturesOpen ? "⛌" : "✰"}
+               </button>
+               {isFeaturesOpen && <Features onClose={() => setIsFeaturesOpen(false)} />}
           </div>
      )
 }

@@ -117,6 +117,17 @@ function deleteUserData(userId) {
      return remove(ref(db, 'users/' + userId));
 }
 
+function addFeature(feature) {
+     const featuresRef = ref(db, 'features');
+     set(featuresRef, feature);
+}
+function listenToFeatures(callback) {
+     const featuresRef = ref(db, 'features');
+     return onValue(featuresRef, snapshot => {
+          callback(snapshot.exists() ? snapshot.val() : []);
+     });
+}
+
 // Export the functions for use in other parts of the application
 export {
      writeUserData,
@@ -128,5 +139,7 @@ export {
      listenForMessages,
      getAllFriends,
      setMyStatus,
-     listenToUserStatus
+     listenToUserStatus,
+     addFeature,
+     listenToFeatures
 };

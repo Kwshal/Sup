@@ -33,6 +33,7 @@ let Sidebar = ({ onLogOut, onClose }) => {
                <div className="sidebar-main">
                     <span className="avatar"> {user.charAt(0).toUpperCase()} </span>
                     <p>{user}</p>
+                    <hr style={{width: "100%", border: "none", borderBottom: "1px dashed #000000"}} />
 
                     <Button id="toggle-theme" type="button" btnText="Toggle Theme" btnFunction={toggleTheme} />
                     <Button id="logOutButton" type="button" btnText="Log Out" btnFunction={onLogOut} />
