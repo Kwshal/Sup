@@ -6,7 +6,7 @@ import Status from "./Status"
 import Features from "./Features"
 
 // props to be passed to the component
-let FriendsList = ({ onChatOpen }) => {
+let FriendsList = ({ onChatOpen,onLogOut }) => {
      const [users, setUsers] = useState([]);
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,7 +46,7 @@ let FriendsList = ({ onChatOpen }) => {
                     </button>
                </span>
                {isSearchBarOpen && <SearchBar onBack={() => setIsSearchBarOpen(false)} />}
-               {isSidebarOpen && <Sidebar onLogOut={() => { localStorage.removeItem('user'); window.location.reload(); }} onClose={() => setIsSidebarOpen(false)} />}
+               {isSidebarOpen && <Sidebar onLogOut={onLogOut} onClose={() => setIsSidebarOpen(false)} />}
                <ul className="user-list-ul">
                     <h5 className="friends">Friends</h5>
                     {users.map((user) => (

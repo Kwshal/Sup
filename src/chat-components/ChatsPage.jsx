@@ -3,18 +3,16 @@ import FriendsList from "./FriendsList"
 import Chat from "./Chat"
 import { setMyStatus } from "../db";
 
-function ChatsPage() {
+function ChatsPage({ onLogOut }) {
      const [isChatOpen, setIsChatOpen] = useState(false);
      const [contact, setContact] = useState("");
 
      const openChat = (e) => {
-          if (e.target.tagName === "LI") {
-               setContact(e.target.querySelector(".name").innerText);
-          } else {
-               // If the click is on the avatar or name span, get the parent LI
-               setContact(e.target.parentElement.querySelector(".name").innerText);
+          let li = e.target.closest("li");
+          if (li) {
+               setContact(li.querySelector(".name").innerText);
+               setIsChatOpen(true);
           }
-          setIsChatOpen(true);
      }
      useEffect(() => {
           setMyStatus(); // Set the user's status to online when the component mounts
@@ -22,7 +20,7 @@ function ChatsPage() {
 
      return (
           <div className="chat-page">
-               {isChatOpen ? <Chat friend={contact} onBack={() => setIsChatOpen(false)} /> : <FriendsList onChatOpen={openChat} />}
+               {isChatOpen ? <Chat friend={contact} onBack={() => setIsChatOpen(false)} /> : <FriendsList onChatOpen={openChat} onLogOut={onLogOut} />}
           </div>
      )
 }

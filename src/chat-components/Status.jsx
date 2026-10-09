@@ -9,7 +9,7 @@ const Status = ({ user }) => {
       setStatusText(status);
     });
   }, [user]);
-      console.log("statusText:", statusText);
+  // console.log("statusText:", statusText);
 
   return (
     <div className={`status-indicator ${statusText}`}>
