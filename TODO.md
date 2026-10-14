@@ -10,7 +10,7 @@ todo: separate user list and friend list
 status: pending
 
 
-# Sup.:
+# Sup.: so far
 1. login/signup - done
 2. chatsPage:
    header: logo, search, menu

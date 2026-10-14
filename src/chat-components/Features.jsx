@@ -1,41 +1,35 @@
-import { useEffect, useState } from "react";
-import { listenToFeatures, addFeature } from "../db";
+import { useState } from "react";
+import { addFeature } from "../db";
 
-function Features() {
-     const [features, setFeatures] = useState([]);
+function Features({ onClose }) {
      const [newFeature, setNewFeature] = useState("");
-
-     useEffect(() => {
-          const unsubscribe = listenToFeatures((featuresList) => {
-               const featuresArray = Object.values(featuresList || {});
-               setFeatures(featuresArray); // Convert the features object to an array
-          });
-
-          return () => unsubscribe();
-     }, []);
 
      const handleAddFeature = (feature) => {
           feature && addFeature(feature);
      };
 
      return (
-          <div className="features-wrapper">
-          <div className="features">
-               <ul>
-                    {/* {features.map((feature, index) => (
-                         <li key={index}>{feature}</li>
-                    ))}
-                    <li><h5>Suggestions here</h5></li> */}
-               </ul>
-               <input
-                    type="text"
-                    placeholder="Suggest a feature"
-                    value={newFeature}
-                    onChange={(e) => setNewFeature(e.target.value)}
-               />
-               <h6>Features you wish whatapp had.</h6>
-               <button onClick={() => handleAddFeature(newFeature)}>save suggestion</button>
-          </div>
+          <div
+               className="features-wrapper"
+               onClick={e => {
+                    if (e.target === e.currentTarget) onClose();
+               }}
+          >
+               <section className="features" role="dialog" aria-modal="true" aria-labelledby="features-title">
+                    <button className="features-close" type="button" onClick={onClose} aria-label="Close suggestions">
+                         Close
+                    </button>
+                    <h3 id="features-title">Suggest a feature</h3>
+                    <input
+                         type="text"
+                         placeholder="Your suggestion"
+                         aria-label="Your suggestion"
+                         value={newFeature}
+                         onChange={(e) => setNewFeature(e.target.value)}
+                    />
+                    <h6>Share a feature you would like to see in Sup_.</h6>
+                    <button type="button" onClick={() => handleAddFeature(newFeature)}>Save suggestion</button>
+               </section>
           </div>
      );
 }

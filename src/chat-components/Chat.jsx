@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import Button from "../components/Button"
 import { saveMsgsToCloud, listenForMessages, listenToUserStatus } from "../db";
+import leftArrow from "../assets/img/left-arrow.png";
+import sendIcon from "../assets/img/send-icon.png";
 
 let Chat = ({ friend, onBack }) => {
      const user = localStorage.getItem("user") || "Guest";
@@ -9,27 +10,31 @@ let Chat = ({ friend, onBack }) => {
      const [status, setStatus] = useState("");
      const containerRef = useRef(null);
 
-     function scrollToBottom() {
-          const messagesContainer = document.querySelector(".chat-window-messages");
-          messagesContainer.scrollTop = messagesContainer.scrollHeight;
-          messagesContainer.scrollBehavior = "smooth";
-
-     }
      useEffect(() => {
           const update = () => {
                document.documentElement.style.setProperty(
-                    "--keyboard-height",
-                    `${window.innerHeight - window.visualViewport.height}px`
+                    "--viewport-height",
+                    `${window.visualViewport?.height ?? window.innerHeight}px`
                );
           };
 
           window.visualViewport?.addEventListener("resize", update);
+          window.addEventListener("resize", update);
           update();
 
           return () => {
                window.visualViewport?.removeEventListener("resize", update);
+               window.removeEventListener("resize", update);
           };
      }, []);
+
+     useEffect(() => {
+          const messagesContainer = containerRef.current;
+          messagesContainer?.scrollTo({
+               top: messagesContainer.scrollHeight,
+               behavior: "smooth"
+          });
+     }, [messages]);
 
      useEffect(() => {
           const unsubscribeMessages = listenForMessages(
@@ -47,7 +52,7 @@ let Chat = ({ friend, onBack }) => {
                unsubscribeMessages();
                unsubscribeStatus();
           };
-     }, [friend]);
+     }, [friend, user]);
      const sendText = () => {
           if (inputValue.trim() !== "") {
                saveMsgsToCloud(user, friend, inputValue);
@@ -60,17 +65,19 @@ let Chat = ({ friend, onBack }) => {
      return (
           <div className="chat-window">
                <div className="chat-window-header">
-                    <Button id="back" type="button" btnText="&#8249;" btnFunction={onBack} />
-                    <h2 className="name">
-                         {/* <span className="avatar">{friend ? friend[0] : "?"}</span> */}
-                         {friend}
-                         <span className={`status-text ${status}`}>{status}</span>
-                    </h2>
-                    <Button id="options" type="button" btnText="&#8942;" />
-                    {/* <hr /> */}
+                    <button id="back" type="button" onClick={onBack} aria-label="Back to chats">
+                         <img src={leftArrow} alt="" />
+                    </button>
+                    <div className="chat-contact">
+                         <span className="avatar">{friend?.charAt(0) || "?"}</span>
+                         <div className="chat-contact-details">
+                              <h2 className="chat-contact-name">{friend}</h2>
+                              <span className={`chat-contact-status ${status}`}>{status || "offline"}</span>
+                         </div>
+                    </div>
+                    <button id="options" type="button" aria-label="Chat options">&#8942;</button>
                </div>
 
-               {/* main content ie messages */}
                <div className="chat-window-content">
                     <div ref={containerRef} className="chat-window-messages">
                          {messages.map(([uniqueKey, text]) => (
@@ -83,11 +90,14 @@ let Chat = ({ friend, onBack }) => {
                     <input
                          type="text"
                          placeholder="Type a message..."
+                         aria-label="Type a message"
                          value={inputValue}
                          onChange={e => setInputValue(e.target.value)}
                          onKeyDown={e => { if (e.key === "Enter") sendText(); }}
                     />
-                    <button id="send" type="button" onClick={sendText}><img src="./src/assets/img/send-icon.png" alt="Send" /></button>
+                    <button id="send" type="button" onClick={sendText} aria-label="Send message" disabled={!inputValue.trim()}>
+                         <img src={sendIcon} alt="" />
+                    </button>
                </div>
           </div>
      )

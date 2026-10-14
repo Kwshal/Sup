@@ -5,11 +5,8 @@ const Status = ({ user }) => {
   const [statusText, setStatusText] = useState("");
 
   useEffect(() => {
-    listenToUserStatus(user, (status) => {
-      setStatusText(status);
-    });
+    return listenToUserStatus(user, setStatusText);
   }, [user]);
-  // console.log("statusText:", statusText);
 
   return (
     <div className={`status-indicator ${statusText}`}>

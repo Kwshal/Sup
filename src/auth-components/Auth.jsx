@@ -6,9 +6,13 @@ function AuthPage({enterChats}) {
      const [isLoggingIn, setIsLoggingIn] = useState(true);
 
      return (
-          <div className="auth-page">
-               {isLoggingIn ? <LoginForm onLogIn={() => setIsLoggingIn(false)} onEnter={enterChats} /> : <SignupForm onSignUp={() => setIsLoggingIn(true)} onEnter={enterChats} />}
-          </div>
+          <main className="auth-page">
+               <section className="auth-panel">
+                    <h1 className="auth-logo">Sup_</h1>
+                    <p className="auth-intro">A simple space to catch up and stay connected.</p>
+                    {isLoggingIn ? <LoginForm onLogIn={() => setIsLoggingIn(false)} onEnter={enterChats} /> : <SignupForm onSignUp={() => setIsLoggingIn(true)} onEnter={enterChats} />}
+               </section>
+          </main>
      );
 }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import StatusMessage from "./StatusMessage";
 import { writeUserData, getUser, setMyStatus } from "../db";
 
@@ -111,7 +111,7 @@ function SignupForm({ onSignUp, onEnter }) {
                {statusMessage && <StatusMessage status={statusMessage} />}
                <div className="button-group">
                     <button id="enterButton" type="submit" onClick={handleNewButtonClick}>Sign Up</button>
-                    <button id="newButton" type="button" onClick={onSignUp}>Aleady have an account? Login</button>
+                    <button id="newButton" type="button" onClick={onSignUp}>Already have an account? Log in</button>
                </div>
           </form>
      );
