@@ -16,19 +16,16 @@ function Features({ onClose }) {
                }}
           >
                <section className="features" role="dialog" aria-modal="true" aria-labelledby="features-title">
-                    <button className="features-close" type="button" onClick={onClose} aria-label="Close suggestions">
-                         Close
-                    </button>
-                    <h3 id="features-title">Suggest a feature</h3>
+                    {/* <h3 id="features-title">Suggest a feature</h3> */}
                     <input
                          type="text"
-                         placeholder="Your suggestion"
+                         placeholder="Suggest a feature"
                          aria-label="Your suggestion"
                          value={newFeature}
                          onChange={(e) => setNewFeature(e.target.value)}
                     />
-                    <h6>Share a feature you would like to see in Sup_.</h6>
-                    <button type="button" onClick={() => handleAddFeature(newFeature)}>Save suggestion</button>
+                    {/* <h6>Share a feature you would like to see in Sup_.</h6> */}
+                    <button type="button" onClick={() => handleAddFeature(newFeature)}>Save</button>
                </section>
           </div>
      );

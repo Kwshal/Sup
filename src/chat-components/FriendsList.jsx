@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllUsers } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
-import Status from "./Status"
+import Status from "../components/Status"
 import Features from "./Features"
 
 // props to be passed to the component
@@ -77,7 +77,7 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                     aria-label={isFeaturesOpen ? "Close feature suggestions" : "Open feature suggestions"}
                     aria-expanded={isFeaturesOpen}
                >
-                    {isFeaturesOpen ? "⛌" : "✰"}
+                    {isFeaturesOpen ? "✖" : "🍀"}
                </button>
                {isFeaturesOpen && <Features onClose={() => setIsFeaturesOpen(false)} />}
           </div>

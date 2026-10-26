@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { getAllUsers } from "../db";
-import Status from "./Status";
+import Status from "../components/Status";
 import leftArrow from "../assets/img/left-arrow.png";
 
 function SearchBar({ onBack, onChatOpen }) {
@@ -25,6 +25,7 @@ function SearchBar({ onBack, onChatOpen }) {
 
      const normalizedSearch = searchText.trim().toLowerCase();
      const filteredUsers = users.filter(user =>
+          normalizedSearch &&
           user?.username &&
           user.username !== localStorage.getItem("user") &&
           user.username.toLowerCase().includes(normalizedSearch)
@@ -65,10 +66,11 @@ function SearchBar({ onBack, onChatOpen }) {
                                    <span className="name">{user.username}</span>
                                    <Status user={user.username} />
                               </span>
+                              <span className="Add-Friend"></span>
                          </li>
                     )) : (
                          <li className="empty-list-message">
-                              {normalizedSearch ? "No users match your search." : "No users found."}
+                              {normalizedSearch ? "No users match your search." : "Search for users to start chatting."}
                          </li>
                     )}
                </ul>

@@ -3,7 +3,7 @@ import FriendsList from "./FriendsList"
 import Chat from "./Chat"
 import { setMyStatus } from "../db";
 
-function ChatsPage({ onLogOut }) {
+function Homepage({ onLogOut }) {
      const [isChatOpen, setIsChatOpen] = useState(false);
      const [contact, setContact] = useState("");
 
@@ -25,4 +25,4 @@ function ChatsPage({ onLogOut }) {
      )
 }
 
-export default ChatsPage;
+export default Homepage;

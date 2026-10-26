@@ -64,18 +64,19 @@ function writeUserData(name, password, status = 'online') {
 }
 
 function saveMsgsToCloud(user, contact, msg) {
-     const contactRef = ref(db, `users/${user}/contacts/${contact}`);
-     const sentTextRef = push(contactRef);
-     set(sentTextRef, {
+     const uid = push(ref(db, `users/${user}/contacts/${contact}`)).key;
+     
+     console.log(serverTimestamp());
+     const contactRef = ref(db, `users/${user}/contacts/${contact}/${uid}`);
+     set(contactRef, {
           msg: msg,
-          timestamp: new Date().toLocaleTimeString(),
+          timestamp: serverTimestamp(),
           type: "sent"
      });
-     const userRef = ref(db, `users/${contact}/contacts/${user}`);
-     const receivedTextRef = push(userRef);
-     set(receivedTextRef, {
+     const userRef = ref(db, `users/${contact}/contacts/${user}/${uid}`);
+     set(userRef, {
           msg: msg,
-          timestamp: new Date().toLocaleTimeString(),
+          timestamp: serverTimestamp(),
           type: "received"
      });
 }
@@ -128,6 +129,35 @@ function listenToFeatures(callback) {
      });
 }
 
+// delete a msg
+// edit a msg
+function deleteMsg(user, contact, msgId) {
+     const sentMsgRef = ref(db, `users/${user}/contacts/${contact}/${msgId}`);
+     const receivedMsgRef = ref(db, `users/${contact}/contacts/${user}/${msgId}`);
+     remove(sentMsgRef);
+     remove(receivedMsgRef);
+     console.log('deleted', msgId);
+}
+function clearChat(user, contact) {
+     const sentMsgRef = ref(db, `users/${user}/contacts/${contact}`);
+     set(sentMsgRef, {});
+     console.log('cleared');
+}
+function editMsg(user, contact, msg, msgId, newMsg) {
+     if (!newMsg || msg === newMsg) return;
+     const sentMsgRef = ref(db, `users/${user}/contacts/${contact}/${msgId}`);
+     const receivedMsgRef = ref(db, `users/${contact}/contacts/${user}/${msgId}`);
+     update(sentMsgRef, {
+          msg: newMsg,
+          edited: true,
+     });
+     update(receivedMsgRef, {
+          msg: newMsg,
+          edited: true,
+     });
+     console.log(user, contact, msg, msgId, newMsg);
+}
+
 // Export the functions for use in other parts of the application
 export {
      writeUserData,
@@ -141,5 +171,8 @@ export {
      setMyStatus,
      listenToUserStatus,
      addFeature,
-     listenToFeatures
+     listenToFeatures,
+     deleteMsg,
+     editMsg,
+     clearChat
 };

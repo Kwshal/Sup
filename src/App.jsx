@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import AuthPage from './auth-components/Auth.jsx'
-import ChatsPage from './chat-components/ChatsPage.jsx'
+import Homepage from './chat-components/Homepage.jsx'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div className={`App${isLoggedIn ? " is-chat-app" : ""}`}>
-      {isLoggedIn ? <ChatsPage onLogOut={handleLogOut} /> : <AuthPage enterChats={() => setIsLoggedIn(true)} />}
+      {isLoggedIn ? <Homepage onLogOut={handleLogOut} /> : <AuthPage enterChats={() => setIsLoggedIn(true)} />}
     </div>
   )
 }
