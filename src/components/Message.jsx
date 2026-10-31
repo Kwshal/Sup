@@ -7,36 +7,62 @@ const Message = ({ message, onDelete, editing, onEdit }) => {
      const [deleting, setDeleting] = useState(false);
      const [actionsVisible, setActionsVisible] = useState(false);
      const messageRef = useRef(null);
+     const doubleCount = (message.msg.match(/\p{Extended_Pictographic}/gu) || []).length;
+     let bubbleSize;
 
+     switch (message.msg.length - doubleCount) {
+          case 1:
+               bubbleSize = "biggest";
+               break;
+          case 2:
+               bubbleSize = "bigger";
+               break;
+          case 3:
+               bubbleSize = "big";
+               break;
+          default:
+               bubbleSize = "";
+     }
      function handleEdit() {
           onEdit();
      }
      function handleDelete() {
           setDeleting(true);
           console.log("Deleting message");
-          setTimeout(onDelete, 1000);
+          setTimeout(onDelete, 450);
+     }
+     function handleActions() {
+          setActionsVisible(!actionsVisible);
      }
 
      return (
-          <li ref={messageRef} className={`${message.type} message ${deleting ? "deleting" : ""}`}>
-               <span className="message-info">
-                    <span className="timestamp">
-                         {new Date(message.timestamp).toLocaleTimeString()}
-                    </span>
-               </span>
-               {message.type === 'sent' &&
+          <li
+               ref={messageRef}
+               className={`${message.type} message ${deleting ? "deleting" : ""} ${actionsVisible ? "action-visible" : ""}`}
+               onClick={handleActions}
+          >
+               {message.type === 'sent' && actionsVisible &&
                     <span className="message-actions-container">
                          <span className="actions">
+                              <button className="copy-message" onClick={() => navigator.clipboard.writeText(message.msg)}>⧉</button>|
                               <button className="delete-message" onClick={handleDelete}>Delete</button>|
-                              <button className="copy-message" onClick={() => navigator.clipboard.writeText(message.msg)}>Copy</button>|
                               <button className="edit-message" onClick={handleEdit}>Edit</button>
                          </span>
                     </span>
                }
-               <span className={`message-text ${editing} ${message.edited ? "edited" : ""}`}>
-                    <span className="message-status">
+               <span className={`message-text ${bubbleSize} ${editing} ${message.edited ? "Edited" : ""}`}>
+                    {editing && <span className="message-status">Editing...</span>}
+                    {!editing && <span className="message-status">
                          {message.edited && "Edited"}
-                    </span>
+                         {message.edited && message.msg.length > 12 && " • "}
+                         <span className={`timestamp ${message.msg.length <= 12 && "outside"}`}>
+                              {new Date(message.timestamp).toLocaleTimeString("en-US", {
+                                   hour: "numeric",
+                                   minute: "2-digit",
+                                   hour12: true
+                              })}
+                         </span>
+                    </span>}
                     <span className="msg">
                          {message.msg}
                     </span>

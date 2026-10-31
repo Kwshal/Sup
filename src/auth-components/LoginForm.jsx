@@ -56,7 +56,7 @@ function LoginForm({onLogIn, onEnter}) {
       if (user.password === trimmedPassword) {
         localStorage.setItem("user", trimmedUsername);
         onEnter();
-        setMyStatus(); // Set the user's status to online after successful login
+        setMyStatus(trimmedUsername); // Set the user's status to online after successful login
       } else {
         setStatusMessage("Incorrect password.");
       }

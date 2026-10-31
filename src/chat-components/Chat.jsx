@@ -5,12 +5,14 @@ import {
      listenToUserStatus,
      deleteMsg,
      editMsg,
-     clearChat
+     clearChat,
+     setMyStatus
 } from "../db";
 import leftArrow from "../assets/img/left-arrow.png";
 import sendIcon from "../assets/img/send-icon.png";
 import OptionsBar from "../components/OptionsBar";
 import Message from "../components/Message";
+import Status from "../components/Status";
 
 let Chat = ({ friend, onBack }) => {
      const user = localStorage.getItem("user") || "Guest";
@@ -23,6 +25,7 @@ let Chat = ({ friend, onBack }) => {
      const [isOptionsOpen, setIsOptionsOpen] = useState(false);
      const [msgId, setMsgId] = useState(null);
      const [originalMsg, setOriginalMsg] = useState("");
+     const [typing, setTyping] = useState(false);
 
      useEffect(() => {
           const update = () => {
@@ -41,6 +44,10 @@ let Chat = ({ friend, onBack }) => {
                window.removeEventListener("resize", update);
           };
      }, []);
+
+     useEffect(() => {
+          typing ? setMyStatus(user, 'typing'): setMyStatus(user);
+     }, [typing])
 
      useEffect(() => {
           const messagesContainer = containerRef.current;
@@ -67,13 +74,17 @@ let Chat = ({ friend, onBack }) => {
                unsubscribeStatus();
           };
      }, [friend, user]);
+
+     function handleInput() {
+          setInputValue(inputRef.current.value);
+          inputValue ? setTyping(true) : setTyping(false);
+     }
+
      const sendText = () => {
           if (inputValue.trim() !== "") {
                saveMsgsToCloud(user, friend, inputValue);
                setInputValue("");
                inputRef.current.focus();
-               // messagesSetter();
-               // Save the message to the cloud
           }
      }
 
@@ -99,13 +110,17 @@ let Chat = ({ friend, onBack }) => {
           <div className="chat-window">
                <div className="chat-window-header">
                     <button id="back" type="button" onClick={onBack} aria-label="Back to chats">
+                         {/* ◀ */}
                          <img src={leftArrow} alt="" />
                     </button>
                     <div className="chat-contact">
-                         <span className="avatar">{friend?.charAt(0) || "?"}</span>
+                         <span className="avatar">
+                              {friend?.charAt(0) || "?"}
+
+                         </span>
                          <div className="chat-contact-details">
                               <h2 className="chat-contact-name">{friend}</h2>
-                              <span className={`chat-contact-status ${status}`}>{status || "offline"}</span>
+                              <Status user={friend} />
                          </div>
                     </div>
                     <button id="options" type="button" onClick={() => setIsOptionsOpen(true)} aria-label="Chat options">&#8942;</button>
@@ -141,9 +156,10 @@ let Chat = ({ friend, onBack }) => {
                          placeholder="Type a message..."
                          aria-label="Type a message"
                          value={inputValue}
-                         onChange={e => setInputValue(e.target.value)}
+                         onChange={handleInput}
+                         onBlur={() => inputRef.current.focus()}
                     />
-                    <button id="send" type="button" onClick={ editing ? editText : sendText } aria-label="Send message">
+                    <button id="send" type="button" onClick={editing ? editText : sendText} aria-label="Send message">
                          {editing ? "✔" : <img src={sendIcon} alt="" />}
                     </button>
                </div>

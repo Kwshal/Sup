@@ -87,14 +87,14 @@ function listenForMessages(user, contact, callback) {
           callback(snapshot.exists() ? snapshot.val() : {});
      });
 }
-function setMyStatus() {
-     const statusRef = ref(db, `users/${localStorage.getItem("user")}/status`);
+function setMyStatus(user, status = 'online') {
+     const statusRef = ref(db, `users/${user}/status`);
      const connectRef = ref(db, '.info/connected');
 
      onValue(connectRef, snapshot => {  // Listen for connection state changes
           if (snapshot.val() === false) return;
-          onDisconnect(statusRef).set('offline');  // Set status to offline when disconnected
-          set(statusRef, 'online');  // Set status to online when connected
+          onDisconnect(statusRef).set(serverTimestamp());  // Set status to offline when disconnected
+          set(statusRef, status);  // Set status to online when connected
      });
 }
 function listenToUserStatus(username, callback) {

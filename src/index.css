@@ -1,33 +1,39 @@
+
 :root {
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
   color-scheme: light;
 
-  --page-bg: #F2F0E6;
-  --surface: #FCFBF5;
-  --surface-muted: #E8E7D8;
-  --border: #D1D2C1;
+  /* User customizable */
+  --base-color: #4d8b9b;
 
-  --text: #24271F;
-  --text-muted: #717568;
+  --page-bg: oklch(from var(--base-color) 96% calc(c * 0.12) h);
+  --surface: oklch(from var(--base-color) 99% calc(c * 0.07) h);
+  --surface-muted: oklch(from var(--base-color) 90% calc(c * 0.18) h);
+  --border: oklch(from var(--base-color) 83% calc(c * 0.24) h);
 
-  --accent: #6654D9;
-  --accent-hover: #5140B9;
-  --accent-contrast: #FFFFFF;
+  --text: oklch(from var(--base-color) 24% calc(c * 0.18) h);
+  --text-muted: oklch(from var(--base-color) 48% calc(c * 0.20) h);
 
-  --signal: #B7D94F;
-  --accent-wash: rgb(102 84 217 / 8%);
-  --surface-edge: rgb(36 39 31 / 7%);
-  --field-focus: rgb(102 84 217 / 20%);
+  --accent: var(--base-color);
+  --accent-hover: oklch(from var(--base-color) 45% c h);
+  --accent-contrast: oklch(from var(--base-color) 98% 0.01 h);
 
-  --sent-message: #E0D9FF;
-  --received-message: #E5E7D9;
+--signal: oklch(from var(--base-color) 78% 0.14 calc(h + 65));
 
-  --shadow: 0 20px 56px rgb(36 39 31 / 10%), 0 3px 10px rgb(36 39 31 / 4%);
+  --accent-wash: color-mix(in oklch, var(--base-color) 9%, transparent);
+  --surface-edge: color-mix(in oklch, var(--text) 7%, transparent);
+  --field-focus: color-mix(in oklch, var(--base-color) 24%, transparent);
+
+  --sent-message: oklch(from var(--base-color) 88% calc(c * 0.30) h);
+  --received-message: oklch(from var(--base-color) 95% calc(c * 0) h);
+
+  --shadow:
+    0 20px 56px color-mix(in oklch, var(--text) 10%, transparent),
+    0 3px 10px color-mix(in oklch, var(--text) 4%, transparent);
 
   --space-1: 4px;
   --space-2: 8px;
@@ -40,27 +46,29 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  --page-bg: #151711;
-  --surface: #20231B;
-  --surface-muted: #2C3024;
-  --border: #414735;
+  --page-bg: oklch(from var(--base-color) 19% calc(c * 0.16) h);
+  --surface: oklch(from var(--base-color) 23% calc(c * 0.20) h);
+  --surface-muted: oklch(from var(--base-color) 29% calc(c * 0.30) h);
+  --border: oklch(from var(--base-color) 37% calc(c * 0.35) h);
 
-  --text: #F1F2E8;
-  --text-muted: #B2B6A5;
+  --text: oklch(from var(--base-color) 94% calc(c * 0.12) h);
+  --text-muted: oklch(from var(--base-color) 70% calc(c * 0.20) h);
 
-  --accent: #B8AAFF;
-  --accent-hover: #D0C7FF;
-  --accent-contrast: #211A3D;
+  --accent: oklch(from var(--base-color) 73% calc(c * 0.85) h);
+  --accent-hover: oklch(from var(--base-color) 82% calc(c * 0.85) h);
+  --accent-contrast: oklch(from var(--base-color) 20% 0.02 h);
 
-  --signal: #C9F36B;
-  --accent-wash: rgb(184 170 255 / 10%);
-  --surface-edge: rgb(0 0 0 / 20%);
-  --field-focus: rgb(184 170 255 / 26%);
+  --signal: oklch(from var(--base-color) 78% calc(c * 0.65) calc(h + 65deg));
 
-  --sent-message: #37324F;
-  --received-message: #2C3127;
+  --accent-wash: color-mix(in oklch, var(--base-color) 12%, transparent);
+  --surface-edge: color-mix(in oklch, var(--text) 12%, transparent);
+  --field-focus: color-mix(in oklch, var(--base-color) 28%, transparent);
 
-  --shadow: 0 18px 50px rgb(0 0 0 / 35%);
+  --sent-message: oklch(from var(--base-color) 36% calc(c * 0.65) h);
+  --received-message: oklch(from var(--base-color) 31% calc(c * 0.35) calc(h + 25deg));
+
+  --shadow:
+    0 18px 50px rgb(0 0 0 / 35%);
 }
 * {
   box-sizing: border-box;
@@ -144,7 +152,7 @@ input:focus-visible {
   overflow: hidden;
   width: min(100%, 420px);
   padding: var(--space-6);
-  border: 1px solid color-mix(in srgb, var(--border) 82%, var(--accent));
+  /* border: 1px solid color-mix(in srgb, var(--border) 82%, var(--accent)); */
   border-radius: 16px;
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--surface) 97%, var(--accent)), var(--surface) 56%),
@@ -152,13 +160,6 @@ input:focus-visible {
   box-shadow: var(--shadow);
 }
 
-.auth-panel::before {
-  position: absolute;
-  inset: 0 0 auto;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--signal) 82%, transparent);
-  content: "";
-}
 
 .auth-logo {
   display: flex;

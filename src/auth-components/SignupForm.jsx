@@ -42,6 +42,7 @@ function SignupForm({ onSignUp, onEnter }) {
           const username = document.getElementById("username");
           const password = document.getElementById("password");
           const confirmPassword = document.getElementById("confirmPassword");
+          // gix thhese ???
 
           if (username.value.trim() === "") {
                setStatusMessage("Please enter a username.");
@@ -60,7 +61,7 @@ function SignupForm({ onSignUp, onEnter }) {
                writeUserData(username.value.trim(), password.value.trim());
           }
           onEnter();
-          setMyStatus(); // Set the user's status to online after successful signup
+          setMyStatus(username); // Set the user's status to online after successful signup
      }
 
      const handleUsernameInput = () => {

@@ -11,6 +11,7 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
      const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
+     let newMsgCount = 0;
 
      useEffect(() => {
           getAllUsers()
@@ -34,7 +35,7 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
           <div className="user-list-container">
                <header className="chat-list-header">
                     <h2 className="logo">
-                         Sup_
+                         Sup
                     </h2>
                     <button id="search-btn" type="button" onClick={() => setIsSearchBarOpen(true)} aria-label="Search users">
                          ⌕️
@@ -45,7 +46,7 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                </header>
                {isSearchBarOpen && <SearchBar onBack={() => setIsSearchBarOpen(false)} onChatOpen={onChatOpen} />}
                {isSidebarOpen && <Sidebar onLogOut={onLogOut} onClose={() => setIsSidebarOpen(false)} />}
-               <h3 className="friends">Friends</h3>
+               {/* <h3 className="friends">Friends</h3> */}
                <ul className="user-list-ul">
                     {users.map((user) => (
                          user && user.username && user.username !== localStorage.getItem("user") &&
@@ -62,10 +63,10 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                               role="button"
                               tabIndex={0}
                          >
-                              <span className="avatar">{user.username ? user.username[0] : "?"}</span>
+                              <span className="avatar">{user.username ? user.username[0] : "?"} </span>
                               <span className="contact-info">
                                    <span className="name">{user.username || user.key}</span>
-                                   <Status user={user.username} />
+                                   <span className="message-info"><Status user={user.username} /> {newMsgCount ? `• ${newMsgCount} new messages`: ''} </span>
                               </span>
                          </li>
                     ))}
@@ -73,11 +74,11 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                <button
                     id="features-btn"
                     type="button"
-                    onClick={() => setIsFeaturesOpen(!isFeaturesOpen)}
+                    // onClick={() => setIsFeaturesOpen(!isFeaturesOpen)}
                     aria-label={isFeaturesOpen ? "Close feature suggestions" : "Open feature suggestions"}
                     aria-expanded={isFeaturesOpen}
                >
-                    {isFeaturesOpen ? "✖" : "🍀"}
+                    {isFeaturesOpen ? "✖" : "AI"}
                </button>
                {isFeaturesOpen && <Features onClose={() => setIsFeaturesOpen(false)} />}
           </div>

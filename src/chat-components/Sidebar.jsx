@@ -12,7 +12,7 @@ let Sidebar = ({ onLogOut, onClose }) => {
 
      return (
           <div
-               className="Sidebar"
+               className="sidebar"
                onClick={e => {
                     if (e.target === e.currentTarget) onClose();
                }}

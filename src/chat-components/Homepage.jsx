@@ -3,7 +3,7 @@ import FriendsList from "./FriendsList"
 import Chat from "./Chat"
 import { setMyStatus } from "../db";
 
-function Homepage({ onLogOut }) {
+function Homepage({ onLogOut, user }) {
      const [isChatOpen, setIsChatOpen] = useState(false);
      const [contact, setContact] = useState("");
 
@@ -15,7 +15,7 @@ function Homepage({ onLogOut }) {
           }
      }
      useEffect(() => {
-          setMyStatus(); // Set the user's status to online when the component mounts
+          setMyStatus(user); // Set the user's status to online when the component mounts
      }, []);
 
      return (

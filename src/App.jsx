@@ -5,9 +5,10 @@ import Homepage from './chat-components/Homepage.jsx'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  let storedUser;
+  
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    storedUser = localStorage.getItem('user');
     if (storedUser) {
       setIsLoggedIn(true);
     }
@@ -20,7 +21,7 @@ function App() {
 
   return (
     <div className={`App${isLoggedIn ? " is-chat-app" : ""}`}>
-      {isLoggedIn ? <Homepage onLogOut={handleLogOut} /> : <AuthPage enterChats={() => setIsLoggedIn(true)} />}
+      {isLoggedIn ? <Homepage onLogOut={handleLogOut} user={storedUser} /> : <AuthPage enterChats={() => setIsLoggedIn(true)} />}
     </div>
   )
 }

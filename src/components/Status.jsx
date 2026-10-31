@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { listenToUserStatus } from "../db"; 
+import { listenToUserStatus } from "../db";
 
 const Status = ({ user }) => {
   const [statusText, setStatusText] = useState("");
@@ -9,9 +9,14 @@ const Status = ({ user }) => {
   }, [user]);
 
   return (
-    <div className={`status-indicator ${statusText}`}>
+    <div className={`status-indicator ${statusText === 'online' ? 'online' : ''}`}>
       <p className="status-text">
-        {statusText}
+        {typeof statusText === 'number'? new Date(statusText).toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true
+        }): statusText === 'typing' ? 'Typing...':
+        statusText}
       </p>
     </div>
   );
