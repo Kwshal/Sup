@@ -50,7 +50,7 @@ const Message = ({ message, onDelete, editing, onEdit }) => {
                          </span>
                     </span>
                }
-               <span className={`message-text ${bubbleSize} ${editing} ${message.edited ? "Edited" : ""}`}>
+               <span className={`message-text ${bubbleSize} ${editing} ${message.edited ? "Edited" : ""} ${message.read ? "read" : "unread"}`}>
                     {editing && <span className="message-status">Editing...</span>}
                     {!editing && <span className="message-status">
                          {message.edited && "Edited"}

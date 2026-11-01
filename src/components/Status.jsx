@@ -11,12 +11,14 @@ const Status = ({ user }) => {
   return (
     <div className={`status-indicator ${statusText === 'online' ? 'online' : ''}`}>
       <p className="status-text">
-        {typeof statusText === 'number'? new Date(statusText).toLocaleTimeString("en-US", {
+        {typeof statusText === 'number'? 'offline, '+
+        new Date(statusText).toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "2-digit",
           hour12: true
-        }): statusText === 'typing' ? 'Typing...':
-        statusText}
+        })
+        : statusText === 'typing' ? 'Typing...'
+        : statusText}
       </p>
     </div>
   );

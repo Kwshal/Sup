@@ -58,14 +58,14 @@
   --accent-hover: oklch(from var(--base-color) 82% calc(c * 0.85) h);
   --accent-contrast: oklch(from var(--base-color) 20% 0.02 h);
 
-  --signal: oklch(from var(--base-color) 78% calc(c * 0.65) calc(h + 65deg));
+  --signal: oklch(from var(--base-color) 78% calc(c * 0.65) calc(h + 65));
 
   --accent-wash: color-mix(in oklch, var(--base-color) 12%, transparent);
   --surface-edge: color-mix(in oklch, var(--text) 12%, transparent);
   --field-focus: color-mix(in oklch, var(--base-color) 28%, transparent);
 
   --sent-message: oklch(from var(--base-color) 36% calc(c * 0.65) h);
-  --received-message: oklch(from var(--base-color) 31% calc(c * 0.35) calc(h + 25deg));
+  --received-message: oklch(from var(--base-color) 31% calc(c * 0.35) calc(h + 25));
 
   --shadow:
     0 18px 50px rgb(0 0 0 / 35%);

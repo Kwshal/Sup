@@ -6,9 +6,10 @@ import {
      deleteMsg,
      editMsg,
      clearChat,
-     setMyStatus
+     setMyStatus,
+     markRead
 } from "../db";
-import leftArrow from "../assets/img/left-arrow.png";
+import backArrow from "../assets/img/back.png";
 import sendIcon from "../assets/img/send-icon.png";
 import OptionsBar from "../components/OptionsBar";
 import Message from "../components/Message";
@@ -40,6 +41,7 @@ let Chat = ({ friend, onBack }) => {
           update();
 
           return () => {
+               update();
                window.visualViewport?.removeEventListener("resize", update);
                window.removeEventListener("resize", update);
           };
@@ -55,6 +57,7 @@ let Chat = ({ friend, onBack }) => {
                top: messagesContainer.scrollHeight,
                behavior: "smooth"
           });
+          markRead(user, friend, messages);
      }, [messages]);
 
      useEffect(() => {
@@ -111,12 +114,11 @@ let Chat = ({ friend, onBack }) => {
                <div className="chat-window-header">
                     <button id="back" type="button" onClick={onBack} aria-label="Back to chats">
                          {/* ◀ */}
-                         <img src={leftArrow} alt="" />
+                         <img src={backArrow} alt="" />
                     </button>
                     <div className="chat-contact">
                          <span className="avatar">
                               {friend?.charAt(0) || "?"}
-
                          </span>
                          <div className="chat-contact-details">
                               <h2 className="chat-contact-name">{friend}</h2>

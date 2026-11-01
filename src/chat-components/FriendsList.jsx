@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../db";
+import { getAllUsers, getUnreadMsgsCount } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
 import Status from "../components/Status"
@@ -11,7 +11,6 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
      const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
-     let newMsgCount = 0;
 
      useEffect(() => {
           getAllUsers()
@@ -66,7 +65,9 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                               <span className="avatar">{user.username ? user.username[0] : "?"} </span>
                               <span className="contact-info">
                                    <span className="name">{user.username || user.key}</span>
-                                   <span className="message-info"><Status user={user.username} /> {newMsgCount ? `• ${newMsgCount} new messages`: ''} </span>
+                                   <span className="message-info">
+                                        <Status user={user.username} />
+                                   </span>
                               </span>
                          </li>
                     ))}

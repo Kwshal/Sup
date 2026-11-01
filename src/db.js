@@ -63,22 +63,48 @@ function writeUserData(name, password, status = 'online') {
      });
 }
 
-function saveMsgsToCloud(user, contact, msg) {
-     const uid = push(ref(db, `users/${user}/contacts/${contact}`)).key;
-     
-     console.log(serverTimestamp());
-     const contactRef = ref(db, `users/${user}/contacts/${contact}/${uid}`);
-     set(contactRef, {
-          msg: msg,
-          timestamp: serverTimestamp(),
-          type: "sent"
-     });
-     const userRef = ref(db, `users/${contact}/contacts/${user}/${uid}`);
-     set(userRef, {
-          msg: msg,
-          timestamp: serverTimestamp(),
-          type: "received"
-     });
+async function saveMsgsToCloud(user, contact, msg) {
+  const messageRef = push(
+    ref(db, `users/${user}/contacts/${contact}`)
+  );
+
+  const uid = messageRef.key;
+
+  const message = {
+    msg,
+    timestamp: serverTimestamp(),
+    read: false
+  };
+
+  const updates = {
+    [`users/${user}/contacts/${contact}/${uid}`]: {
+      ...message,
+      type: "sent"
+    },
+    [`users/${contact}/contacts/${user}/${uid}`]: {
+      ...message,
+      type: "received"
+    }
+  };
+
+  await update(ref(db), updates);
+
+  return uid;
+}
+
+function markRead(user, contact, messages) {
+  const updates = {};
+
+  messages.forEach(([id, message]) => {
+    if (message.type === "received" && !message.read) {
+      updates[`users/${user}/contacts/${contact}/${id}/read`] = true;
+      updates[`users/${contact}/contacts/${user}/${id}/read`] = true;
+    }
+  });
+
+  if (Object.keys(updates).length) {
+    update(ref(db), updates);
+  }
 }
 
 function listenForMessages(user, contact, callback) {
@@ -158,6 +184,20 @@ function editMsg(user, contact, msg, msgId, newMsg) {
      console.log(user, contact, msg, msgId, newMsg);
 }
 
+// get unread msgs
+function getUnreadMsgsCount(user, contact) {
+     const msgsRef = ref(db, `users/${user}/contacts/${contact}`);
+     return get(msgsRef).then(snapshot => {
+          if (snapshot.exists()) {
+               const messages = snapshot.val();
+               const unreadMessages = Object.entries(messages).filter(([id, message]) => message.type === 'received' && !message.read);
+               return unreadMessages.length;
+          } else {
+               return 0;
+          }
+     });
+}
+
 // Export the functions for use in other parts of the application
 export {
      writeUserData,
@@ -174,5 +214,7 @@ export {
      listenToFeatures,
      deleteMsg,
      editMsg,
-     clearChat
+     clearChat,
+     markRead,
+     getUnreadMsgsCount
 };

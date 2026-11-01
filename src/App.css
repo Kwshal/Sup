@@ -80,6 +80,11 @@
   background: var(--surface-muted);
 }
 
+#back,
+#back-btn {
+  padding: 0 !important;
+}
+
 #search-btn {
   font-size: 1.8rem;
 }
@@ -232,7 +237,7 @@
 .sidebar-main {
   position: relative;
   display: flex;
-  width: min(65%, 320px);
+  width: min(70%, 320px);
   height: 100%;
   flex-direction: column;
   align-items: center;
@@ -678,7 +683,7 @@
   /* border: 1px solid color-mix(in srgb, var(--border) 32%, transparent); */
   border-radius: 12px;
   color: var(--text);
-  padding: var(--space-2) ;
+  padding: var(--space-2);
   font-size: 1rem;
   line-height: 1.2;
   overflow-wrap: anywhere;
@@ -696,7 +701,7 @@
   }
 
   &.editing {
-    outline: 2px solid var(--text-muted);
+    box-shadow: 0 2px 2px var(--text-muted);
   }
 
   &.action-visible {
@@ -717,10 +722,14 @@
     font-size: xx-large;
     line-height: 1;
   }
+
+  &.unread {
+    opacity: 0.8;
+  }
 }
 
 .timestamp.outside {
-  width: 45px;
+  width: 50px;
   display: flex;
   flex-direction: column;
   color: var(--text-muted);
@@ -737,6 +746,7 @@
   overflow: hidden;
   gap: var(--space-1);
   color: var(--text);
+  background: var(--surface);
   width: fit-content;
   right: 0;
   flex-direction: column;
@@ -777,8 +787,7 @@
   & .actions {
     padding: var(--space-1);
     border-radius: 10px;
-    background: var(--surface-muted);
-    background: whitesmoke;
+    background: var(--received-message);
     /* border: 1px solid color-mix(in srgb, var(--border) 32%, transparent); */
   }
 
@@ -892,4 +901,40 @@
 
 .options-bar {
   display: none;
+}
+
+.theme-color-picker {
+  width: 100%;
+  display: flex;
+  gap: var(--space-2);
+}
+
+#color-picker {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  /* padding: 4px; */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  cursor: pointer;
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+    background: var(--base-color);
+  }
+}
+
+#color-picker-text {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 1rem;
+  border-radius: 12px;
+  background: var(--surface);
+  text-align: center;
 }

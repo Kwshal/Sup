@@ -1,4 +1,5 @@
 import Button from "../components/Button"
+import ThemeColorPicker from "../components/ThemeColorPicker"
 
 let Sidebar = ({ onLogOut, onClose }) => {
 
@@ -8,6 +9,7 @@ let Sidebar = ({ onLogOut, onClose }) => {
           const root = document.documentElement;
           const current = root.getAttribute("data-theme");
           root.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+          localStorage.setItem("theme", current === "dark" ? "light" : "dark");
      }
 
      return (
@@ -23,6 +25,8 @@ let Sidebar = ({ onLogOut, onClose }) => {
                     <hr />
 
                     <Button id="toggle-theme" type="button" btnText="Toggle Theme" btnFunction={toggleTheme} />
+                    <ThemeColorPicker />
+                    <hr />
                     <Button id="logOutButton" type="button" btnText="Log Out" btnFunction={onLogOut} />
                </div>
           </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { getAllUsers } from "../db";
 import Status from "../components/Status";
-import leftArrow from "../assets/img/left-arrow.png";
+import backArrow from "../assets/img/back.png";
 
 function SearchBar({ onBack, onChatOpen }) {
      const [searchText, setSearchText] = useState("");
@@ -35,7 +35,7 @@ function SearchBar({ onBack, onChatOpen }) {
           <div className="search-bar">
                <div className="search-bar-container">
                     <button id="back-btn" type="button" onClick={onBack} aria-label="Back to chats">
-                         <img src={leftArrow} alt="" />
+                         <img src={backArrow} alt="" />
                     </button>
                     <input
                          type="search"
