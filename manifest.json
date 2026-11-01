@@ -8,12 +8,13 @@
       "type": "image/png"
     },
     {
-      "src": "cute-bright-logo.png",
+      "src": "cute-bright-logo (1).png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "/Sup/",
+  "scope": "/Sup/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
