@@ -6,7 +6,7 @@ function ThemeColorPicker() {
      useEffect(() => {
           const color = CSS.supports("color", baseColor)
                ? baseColor
-               : "#F2F0E6";
+               : "#4d8b9b";
           document.documentElement.style.setProperty(
                "--base-color",
                color
@@ -26,6 +26,7 @@ function ThemeColorPicker() {
                     id="color-picker-text"
                     type="text"
                     value={baseColor}
+                    placeholder="Color: red, etc."
                     onChange={(e) => setBaseColor(e.target.value)}
                />
           </div>

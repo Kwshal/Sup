@@ -41,7 +41,7 @@ const Message = ({ message, onDelete, editing, onEdit }) => {
                className={`${message.type} message ${deleting ? "deleting" : ""} ${actionsVisible ? "action-visible" : ""}`}
                onClick={handleActions}
           >
-               {message.type === 'sent' && actionsVisible &&
+               {actionsVisible &&
                     <span className="message-actions-container">
                          <span className="actions">
                               <button className="copy-message" onClick={() => navigator.clipboard.writeText(message.msg)}>⧉</button>|
@@ -53,19 +53,19 @@ const Message = ({ message, onDelete, editing, onEdit }) => {
                <span className={`message-text ${bubbleSize} ${editing} ${message.edited ? "Edited" : ""} ${message.read ? "read" : "unread"}`}>
                     {editing && <span className="message-status">Editing...</span>}
                     {!editing && <span className="message-status">
-                         {message.edited && "Edited"}
-                         {message.edited && message.msg.length > 12 && " • "}
-                         <span className={`timestamp ${message.msg.length <= 12 && "outside"}`}>
+                         {message.edited && "Edited "}
+                         {/* {message.edited && message.msg.length > 12 && " • "} */}
+                    </span>}
+                    <span className="msg">
+                         {message.msg}
+                    </span>
+                         {actionsVisible && <span className={`timestamp ${message.msg.length <= 12 && "outside"}`}>
                               {new Date(message.timestamp).toLocaleTimeString("en-US", {
                                    hour: "numeric",
                                    minute: "2-digit",
                                    hour12: true
                               })}
-                         </span>
-                    </span>}
-                    <span className="msg">
-                         {message.msg}
-                    </span>
+                         </span>}
                </span>
           </li>
      );

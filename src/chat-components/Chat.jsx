@@ -26,7 +26,6 @@ let Chat = ({ friend, onBack }) => {
      const [isOptionsOpen, setIsOptionsOpen] = useState(false);
      const [msgId, setMsgId] = useState(null);
      const [originalMsg, setOriginalMsg] = useState("");
-     const [typing, setTyping] = useState(false);
 
      useEffect(() => {
           const update = () => {
@@ -48,8 +47,8 @@ let Chat = ({ friend, onBack }) => {
      }, []);
 
      useEffect(() => {
-          typing ? setMyStatus(user, 'typing'): setMyStatus(user);
-     }, [typing])
+          inputValue ? setMyStatus(user, 'typing'): setMyStatus(user);
+     }, [inputValue])
 
      useEffect(() => {
           const messagesContainer = containerRef.current;
@@ -80,7 +79,6 @@ let Chat = ({ friend, onBack }) => {
 
      function handleInput() {
           setInputValue(inputRef.current.value);
-          inputValue ? setTyping(true) : setTyping(false);
      }
 
      const sendText = () => {

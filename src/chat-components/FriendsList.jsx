@@ -3,14 +3,27 @@ import { getAllUsers, getUnreadMsgsCount } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
 import Status from "../components/Status"
-import Features from "./Features"
+import Features from "./AI"
 
 // props to be passed to the component
 let FriendsList = ({ onChatOpen,onLogOut }) => {
      const [users, setUsers] = useState([]);
+     const [unreadCounts, setUnreadCounts] = useState({});
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
      const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
+
+     useEffect(() => {
+          const fetchUnreadCounts = async () => {
+               const counts = {};
+               for (const user of users) {
+                    const count = await getUnreadMsgsCount(localStorage.getItem("user"), user.username);
+                    counts[user.username] = count;
+               }
+               setUnreadCounts(counts);
+          }
+          fetchUnreadCounts();
+     }, [users]);
 
      useEffect(() => {
           getAllUsers()
@@ -67,6 +80,7 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                                    <span className="name">{user.username || user.key}</span>
                                    <span className="message-info">
                                         <Status user={user.username} />
+                                        {unreadCounts[user.username] > 0 && <span className="unread-count"> • {unreadCounts[user.username]} new {unreadCounts[user.username] > 1 ? 'messages': 'message'}</span>}
                                    </span>
                               </span>
                          </li>
