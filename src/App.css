@@ -67,7 +67,7 @@
   border: 0;
   border-radius: 10px;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--accent);
   cursor: pointer;
   font-size: 1.5rem;
 }
@@ -204,6 +204,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--signal);
+  box-shadow: 0 0 0 3px var(--signal-wash);
   /* position: absolute;
   bottom: 5%;
   right: 5%; */
@@ -211,6 +212,11 @@
 
 .status-indicator.typing {
   color: var(--signal);
+}
+
+#count {
+  color: var(--text);
+  /* font-weight: 700; */
 }
 
 .message-info {
@@ -658,6 +664,10 @@
   & .timestamp {
     right: calc(100% + 5px);
   }
+
+  & .message-actions-container {
+    right: 10px;
+  }
 }
 
 .message.received {
@@ -671,6 +681,11 @@
     left: calc(100% + 5px);
     text-align: left;
   }
+
+  & .message-actions-container {
+    left: 10px;
+  }
+
 }
 
 .message-text {
@@ -721,10 +736,12 @@
   &.biggest {
     font-size: xx-large;
     line-height: 1;
+    /* background: transparent !important; */
   }
 
   &.unread {
-    opacity: 0.8;
+    background: var(--surface) !important;
+    border: 1px solid var(--sent-message);
   }
 }
 
@@ -748,52 +765,50 @@
   color: var(--text);
   background: var(--surface);
   width: fit-content;
-  right: 0;
   flex-direction: column;
   justify-content: flex-end;
   position: absolute;
   top: -20px;
-  right: 10px;
   z-index: 3;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-
-  & button {
-    /* padding: var(--space-1) var(--space-2); */
-    border: 0;
-    height: 100%;
-    border-radius: 10px;
-    background: transparent;
-    font-size: 1rem;
-    align-self: center;
-
-    &:hover {
-      color: var(--text-muted) !important;
-    }
-  }
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  border-radius: 55px;
 
   & button:hover {
     background: var(--surface-muted);
   }
 
-  & span {
+  & .actions {
     display: flex;
     flex-direction: row;
     justify-content: end;
     width: fit-content;
     gap: var(--space-1);
-  }
-
-  & .actions {
     padding: var(--space-1);
     border-radius: 10px;
     background: var(--received-message);
-    /* border: 1px solid color-mix(in srgb, var(--border) 32%, transparent); */
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+
+    & button {
+      border: 0;
+      height: 100%;
+      border-radius: 10px;
+      background: transparent;
+      font-size: 1rem;
+      align-self: center;
+
+      &:hover {
+        color: var(--text-muted) !important;
+      }
+
+    }
+      & .react-btn {
+        border: solid 1px var(--border);
+        border-radius: 55px;
+      }
   }
 
-  & .reaction-emojis {
-    width: fit-content;
-  }
 }
 
 .chat-window-input {
@@ -837,7 +852,6 @@
   background: linear-gradient(145deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--signal)));
   background: var(--accent);
   color: var(--accent-contrast);
-  /* box-shadow: 0 3px 8px color-mix(in srgb, var(--accent) 23%, transparent), inset 0 1px 0 rgb(255 255 255 / 20%); */
   cursor: pointer;
 }
 

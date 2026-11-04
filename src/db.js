@@ -111,6 +111,7 @@ function listenForMessages(user, contact, callback) {
      const msgsRef = ref(db, `users/${user}/contacts/${contact}`);
      return onValue(msgsRef, snapshot => {
           callback(snapshot.exists() ? snapshot.val() : {});
+          // console.log(snapshot.exists() && Object.entries(snapshot.val()));
      });
 }
 function setMyStatus(user, status = 'online') {
@@ -169,31 +170,34 @@ function clearChat(user, contact) {
      set(sentMsgRef, {});
      console.log('cleared');
 }
-function editMsg(user, contact, msg, msgId, newMsg) {
-     if (!newMsg || msg === newMsg) return;
-     const sentMsgRef = ref(db, `users/${user}/contacts/${contact}/${msgId}`);
-     const receivedMsgRef = ref(db, `users/${contact}/contacts/${user}/${msgId}`);
-     update(sentMsgRef, {
-          msg: newMsg,
-          edited: true,
-     });
-     update(receivedMsgRef, {
-          msg: newMsg,
-          edited: true,
-     });
-     console.log(user, contact, msg, msgId, newMsg);
-}
 
+async function editMsg(user, contact, msg, msgId, newMsg) {
+  const edited = newMsg && newMsg !== msg;
+
+  const sentMsgPath = `users/${user}/contacts/${contact}/${msgId}`;
+  const receivedMsgPath = `users/${contact}/contacts/${user}/${msgId}`;
+
+  const updates = {
+    [`${sentMsgPath}/msg`]: newMsg,
+    [`${sentMsgPath}/edited`]: edited,
+    [`${receivedMsgPath}/msg`]: newMsg,
+    [`${receivedMsgPath}/edited`]: edited
+  };
+
+  await update(ref(db), updates);
+}
 // get unread msgs
-function getUnreadMsgsCount(user, contact) {
+function getUnreadMsgsCount(contact) {
+     const user = localStorage.getItem("user");
      const msgsRef = ref(db, `users/${user}/contacts/${contact}`);
+
      return get(msgsRef).then(snapshot => {
           if (snapshot.exists()) {
                const messages = snapshot.val();
                const unreadMessages = Object.entries(messages).filter(([id, message]) => message.type === 'received' && !message.read);
                return unreadMessages.length;
           } else {
-               return 0;
+               return Promise.resolve(0); // No messages, so unread count is 0
           }
      });
 }

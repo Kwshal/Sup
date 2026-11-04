@@ -75,6 +75,7 @@ function LoginForm({onLogIn, onEnter}) {
         value={username}
         onChange={handleUsernameChange}
         placeholder="Username"
+        autoComplete="username"
         required
       />
       <input

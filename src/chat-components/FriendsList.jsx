@@ -1,29 +1,16 @@
 import { useEffect, useState } from "react";
-import { getAllUsers, getUnreadMsgsCount } from "../db";
+import { getAllUsers } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
-import Status from "../components/Status"
+import FriendLi from "./Friend-li"
 import Features from "./AI"
 
 // props to be passed to the component
 let FriendsList = ({ onChatOpen,onLogOut }) => {
      const [users, setUsers] = useState([]);
-     const [unreadCounts, setUnreadCounts] = useState({});
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
      const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
-
-     useEffect(() => {
-          const fetchUnreadCounts = async () => {
-               const counts = {};
-               for (const user of users) {
-                    const count = await getUnreadMsgsCount(localStorage.getItem("user"), user.username);
-                    counts[user.username] = count;
-               }
-               setUnreadCounts(counts);
-          }
-          fetchUnreadCounts();
-     }, [users]);
 
      useEffect(() => {
           getAllUsers()
@@ -61,29 +48,13 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                {/* <h3 className="friends">Friends</h3> */}
                <ul className="user-list-ul">
                     {users.map((user) => (
-                         user && user.username && user.username !== localStorage.getItem("user") &&
-                         <li
-                              key={user.key}
-                              onClick={onChatOpen}
-                              onKeyDown={e => {
-                                   if (e.key === "Enter" || e.key === " ") {
-                                        e.preventDefault();
-                                        onChatOpen(e);
-                                   }
-                              }}
-                              className="user-list-item"
-                              role="button"
-                              tabIndex={0}
-                         >
-                              <span className="avatar">{user.username ? user.username[0] : "?"} </span>
-                              <span className="contact-info">
-                                   <span className="name">{user.username || user.key}</span>
-                                   <span className="message-info">
-                                        <Status user={user.username} />
-                                        {unreadCounts[user.username] > 0 && <span className="unread-count"> • {unreadCounts[user.username]} new {unreadCounts[user.username] > 1 ? 'messages': 'message'}</span>}
-                                   </span>
-                              </span>
-                         </li>
+                         user && user.username && user.username !== localStorage.getItem("user") && (
+                              <FriendLi
+                                   key={user.key}
+                                   user={user}
+                                   onChatOpen={onChatOpen}
+                              />
+                         )
                     ))}
                </ul>
                <button

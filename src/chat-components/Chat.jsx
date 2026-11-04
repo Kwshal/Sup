@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import {
      saveMsgsToCloud,
      listenForMessages,
-     listenToUserStatus,
      deleteMsg,
      editMsg,
      clearChat,
@@ -19,13 +18,16 @@ let Chat = ({ friend, onBack }) => {
      const user = localStorage.getItem("user") || "Guest";
      const [messages, setMessages] = useState([]);
      const [inputValue, setInputValue] = useState("");
-     const [status, setStatus] = useState("");
      const containerRef = useRef(null);
      const inputRef = useRef(null);
      const [editing, setEditing] = useState(false);
      const [isOptionsOpen, setIsOptionsOpen] = useState(false);
      const [msgId, setMsgId] = useState(null);
      const [originalMsg, setOriginalMsg] = useState("");
+
+     useEffect(() => {
+          inputRef.current.focus();
+     }, []);
 
      useEffect(() => {
           const update = () => {
@@ -66,14 +68,8 @@ let Chat = ({ friend, onBack }) => {
                data => setMessages(Object.entries(data))
           );
 
-          const unsubscribeStatus = listenToUserStatus(
-               friend,
-               status => setStatus(status)
-          );
-
           return () => {
                unsubscribeMessages();
-               unsubscribeStatus();
           };
      }, [friend, user]);
 
@@ -112,11 +108,11 @@ let Chat = ({ friend, onBack }) => {
                <div className="chat-window-header">
                     <button id="back" type="button" onClick={onBack} aria-label="Back to chats">
                          {/* ◀ */}
-                         <img src={backArrow} alt="" />
+                         <img src={backArrow} alt="back" />
                     </button>
                     <div className="chat-contact">
                          <span className="avatar">
-                              {friend?.charAt(0) || "?"}
+                              {friend?.pfp || friend?.charAt(0) || "?"}
                          </span>
                          <div className="chat-contact-details">
                               <h2 className="chat-contact-name">{friend}</h2>
@@ -160,7 +156,7 @@ let Chat = ({ friend, onBack }) => {
                          onBlur={() => inputRef.current.focus()}
                     />
                     <button id="send" type="button" onClick={editing ? editText : sendText} aria-label="Send message">
-                         {editing ? "✔" : <img src={sendIcon} alt="" />}
+                         {editing ? "✔" : <img id="send-icon" src={sendIcon} alt="" />}
                     </button>
                </div>
           </div>

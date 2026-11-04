@@ -44,9 +44,14 @@ const Message = ({ message, onDelete, editing, onEdit }) => {
                {actionsVisible &&
                     <span className="message-actions-container">
                          <span className="actions">
-                              <button className="copy-message" onClick={() => navigator.clipboard.writeText(message.msg)}>⧉</button>|
-                              <button className="delete-message" onClick={handleDelete}>Delete</button>|
-                              <button className="edit-message" onClick={handleEdit}>Edit</button>
+                              <button className="copy-message" onClick={() => navigator.clipboard.writeText(message.msg)}>⧉</button>
+                              <button className="react-btn" onClick={() => setReacting(!reacting)}>♡</button>
+                              {message.type === "sent" &&
+                                   <>
+                                        <button className="delete-message" onClick={handleDelete}>Delete</button>
+                                        <button className="edit-message" onClick={handleEdit}>Edit</button>
+                                   </>
+                              }
                          </span>
                     </span>
                }
@@ -59,13 +64,13 @@ const Message = ({ message, onDelete, editing, onEdit }) => {
                     <span className="msg">
                          {message.msg}
                     </span>
-                         {actionsVisible && <span className={`timestamp ${message.msg.length <= 12 && "outside"}`}>
-                              {new Date(message.timestamp).toLocaleTimeString("en-US", {
-                                   hour: "numeric",
-                                   minute: "2-digit",
-                                   hour12: true
-                              })}
-                         </span>}
+                    {actionsVisible && <span className={`timestamp ${message.msg.length <= 12 && "outside"}`}>
+                         {new Date(message.timestamp).toLocaleTimeString("en-US", {
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true
+                         })}
+                    </span>}
                </span>
           </li>
      );
