@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { getAllUsers } from "../db";
 import Status from "../components/Status";
 import backArrow from "../assets/img/back.png";
@@ -6,6 +6,11 @@ import backArrow from "../assets/img/back.png";
 function SearchBar({ onBack, onChatOpen }) {
      const [searchText, setSearchText] = useState("");
      const [users, setUsers] = useState([]);
+     const inputRef = useRef(null);
+
+     useEffect(() => {
+          inputRef.current.focus();
+     }, []);
 
      useEffect(() => {
           getAllUsers()
@@ -19,6 +24,7 @@ function SearchBar({ onBack, onChatOpen }) {
                     } else {
                          setUsers([]);
                     }
+
                })
                .catch(() => setUsers([]));
      }, []);
@@ -38,9 +44,10 @@ function SearchBar({ onBack, onChatOpen }) {
                          <img src={backArrow} alt="" />
                     </button>
                     <input
+                         ref={inputRef}
                          type="search"
                          id="search-input"
-                         placeholder="Search users..."
+                         placeholder="Search users"
                          aria-label="Search users"
                          value={searchText}
                          onChange={(e) => setSearchText(e.target.value)}
@@ -70,7 +77,7 @@ function SearchBar({ onBack, onChatOpen }) {
                          </li>
                     )) : (
                          <li className="empty-list-message">
-                              {normalizedSearch ? "No users match your search." : "Search for users to start chatting."}
+                              {normalizedSearch ? "No users match your search." : "Search for friends to start chatting."}
                          </li>
                     )}
                </ul>

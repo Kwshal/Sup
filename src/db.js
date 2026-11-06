@@ -20,7 +20,7 @@ let getAllUsers = () => {
           if (snapshot.exists()) {
                return snapshot.val();
           } else {
-               throw new Error("No data available");
+               return {};
           }
      });
 }
@@ -29,7 +29,7 @@ let getAllFriends = (user) => {
           if (snapshot.exists()) {
                return snapshot.val();
           } else {
-               throw new Error("No data available");
+               return {}; 
           }
      });
 }
@@ -38,7 +38,7 @@ let getUser = async (user) => {
           if (snapshot.exists()) {
                return snapshot.val();
           } else {
-               return null; // <--- Return null instead of throwing
+               return null; 
           }
      });
 }
@@ -46,7 +46,6 @@ let getUser = async (user) => {
 
 // Function to write data to the database
 function writeUserData(name, password, status = 'online') {
-     // console.log("writeUserData called with name:", name, "and password:", password);
      const userRef = ref(db, 'users/' + name);
      // check ig the user already exists
      get(userRef).then((snapshot) => {

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { getAllUsers } from "../db";
+import { getAllUsers, getAllFriends } from "../db";
 import Sidebar from "./Sidebar"
 import SearchBar from "./SearchBar"
 import FriendLi from "./Friend-li"
 import Features from "./AI"
 
 // props to be passed to the component
-let FriendsList = ({ onChatOpen,onLogOut }) => {
+let FriendsList = ({ onChatOpen, onLogOut }) => {
      const [users, setUsers] = useState([]);
      const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
      const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
+     const currentUser = localStorage.getItem("user") || "Guest";
 
      useEffect(() => {
           getAllUsers()
@@ -18,14 +19,17 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                     // console.log("Fetched users data:", data);
                     if (data) {
                          // Convert object to array
-                         const usersArray = Object.entries(data).map(([key, value]) => ({
+                         return Object.entries(data).map(([key, value]) => ({
                               key,
                               ...value
                          }));
-                         setUsers(usersArray);
-                    } else {
-                         setUsers([]);
                     }
+               }).then(usersArray => {
+                    getAllFriends(currentUser)
+                         .then(friendsData => {   
+                              const friends = usersArray.filter(user => Object.keys(friendsData || {}).includes(user.username));
+                              setUsers(friends);
+                         })
                })
                .catch(() => setUsers([]));
      }, []);
@@ -47,7 +51,7 @@ let FriendsList = ({ onChatOpen,onLogOut }) => {
                {isSidebarOpen && <Sidebar onLogOut={onLogOut} onClose={() => setIsSidebarOpen(false)} />}
                {/* <h3 className="friends">Friends</h3> */}
                <ul className="user-list-ul">
-                    {users.map((user) => (
+                    {users.length === 0 ? <li className="user-list-item no-friends">You don't have any friends<button onClick={() => setIsSearchBarOpen(true)}>Make Friends</button></li> : users.map((user) => (
                          user && user.username && user.username !== localStorage.getItem("user") && (
                               <FriendLi
                                    key={user.key}

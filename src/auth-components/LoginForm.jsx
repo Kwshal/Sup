@@ -69,20 +69,24 @@ function LoginForm({onLogIn, onEnter}) {
 
   return (
     <form className="auth-form" onSubmit={handleFormSubmit}>
+      <label htmlFor="username">Username</label>
       <input
         ref={usernameRef}
         type="text"
+        id="username"
         value={username}
         onChange={handleUsernameChange}
-        placeholder="Username"
+        // placeholder="Username"
         autoComplete="username"
         required
       />
+      <label htmlFor="password">Password</label>
       <input
         type="password" 
+        id="password"
         value={password}
         onChange={handlePasswordChange}
-        placeholder="Password"
+        // placeholder="Password"
         autoComplete="current-password"
         required
       />

@@ -125,14 +125,28 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-1) 0;
-  /* border: 0; */
-  /* border-bottom: 1px solid color-mix(in srgb, var(--border) 74%, transparent); */
-  /* border-radius: 10px; */
   background: transparent;
   color: var(--text);
   cursor: pointer;
   text-align: left;
   transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+
+  &.no-friends {
+    display: flex;
+    width: 100%;
+    height: 50%;
+    justify-content: center;
+    gap: var(--space-2);
+    flex-direction: column;
+
+    & button {
+      background: var(--accent);
+      color: var(--accent-contrast);
+      padding: var(--space-2) var(--space-3);
+      border: 0;
+      border-radius: 10px;
+    }
+  }
 }
 
 .user-list-item:hover,
@@ -559,18 +573,20 @@
 }
 
 .chat-contact .avatar {
-  width: 35px;
-  height: 35px;
-  flex-basis: 35px;
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
   position: relative;
 }
 
 .chat-contact-details {
+  height: 100%;
   display: flex;
   min-width: 0;
   flex-direction: column;
   align-items: flex-start;
-  /* gap: var(--space-1); */
+  justify-content: space-between;
+  gap: var(--space-1);
 }
 
 .chat-contact-name {

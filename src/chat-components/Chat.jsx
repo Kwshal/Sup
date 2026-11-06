@@ -25,9 +25,9 @@ let Chat = ({ friend, onBack }) => {
      const [msgId, setMsgId] = useState(null);
      const [originalMsg, setOriginalMsg] = useState("");
 
-     useEffect(() => {
-          inputRef.current.focus();
-     }, []);
+     // useEffect(() => {
+     //      inputRef.current.focus();
+     // }, []);
 
      useEffect(() => {
           const update = () => {
